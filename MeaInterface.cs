@@ -23,6 +23,7 @@ namespace MeaExampleNet{
 
         public MeaInterface(){
 
+            Console.WriteLine("mea interface made");
             ZContext = ZmqContext.Create();
             meaPublisher = ZContext.CreateSocket(SocketType.PUB);
             commandSubscriber = ZContext.CreateSocket(SocketType.SUB)

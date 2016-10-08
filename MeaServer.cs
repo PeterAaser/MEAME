@@ -18,6 +18,7 @@ namespace MeaExampleNet{
         int hwchannels = 0;
         int gain = 0;
         int block = 0;
+
         const int samplingRate = 1000;
 
         delegate void onChannelDataDelegate(ushort[] data, int offset);
@@ -25,6 +26,7 @@ namespace MeaExampleNet{
         public MeaInterface(){}
 
         public String[] getDeviceListDescriptors(){
+            Console.WriteLine("getting descriptors");
             usblist.Initialize(DeviceEnumNet.MCS_MEA_DEVICE);
             String[] devices = new String[usblist.Count];
 
@@ -34,11 +36,13 @@ namespace MeaExampleNet{
                     + usblist.GetUsbListEntry(ii).SerialNumber;
             }
 
+            Console.WriteLine("returning descriptors");
             return devices;
         }
 
 
-        public void activateDevice(uint index){
+        public bool activateDevice(uint index){
+            Console.WriteLine("activating device");
 
             if(device != null){
                 device.StopDacq();
@@ -61,6 +65,7 @@ namespace MeaExampleNet{
 
             int ana, digi, che, tim, block;
             device.GetChannelLayout(out ana, out digi, out che, out tim, out block, 0);
+            block = device.GetChannelsInBlock(); // I guess
 
             device.SetSampleRate(samplingRate, 1, 0);
 
@@ -74,6 +79,9 @@ namespace MeaExampleNet{
             bool[] selectedChannels = new bool[block];
             for (int i = 0; i < block; i++){ selectedChannels[i] = true; } // hurr
 
+
+            channelblocksize = samplingRate / 10;
+
             device.SetSelectedData(selectedChannels,
                                   10 * channelblocksize,
                                   channelblocksize,
@@ -84,28 +92,46 @@ namespace MeaExampleNet{
 
             device.ChannelBlock_SetCheckChecksum((uint)che, (uint)tim); // ???
 
+            Console.WriteLine(block);
+            Console.WriteLine(samplingRate);
+            Console.WriteLine(hwchannels);
+            Console.WriteLine(ana);
+            Console.WriteLine(digi);
+            Console.WriteLine(che);
+            Console.WriteLine(tim);
+            Console.WriteLine(gain);
+
+            return true;
+
         }
 
-        void onChannelData(CMcsUsbDacqNet d, int index, int numSamples){
-            int sizeRet, totalChannels, offset, channels;
-            device.ChannelBlock_GetChannel(0, 0, out totalChannels, out offset, out channels);
-            ushort[] data = device.ChannelBlock_ReadFramesUI16(0, channelblocksize, out sizeRet);
+        void onChannelData(CMcsUsbDacqNet d, int cbHandle, int numSamples){
 
+            Console.WriteLine("getting the data, lads");
+            int returnedFrames, totalChannels, offset, channels;
+            device.ChannelBlock_GetChannel(0, 0, out totalChannels, out offset, out channels);
+            ushort[] data = device.ChannelBlock_ReadFramesUI16(0, channelblocksize, out returnedFrames);
             for (int ii = 0; ii < totalChannels; ii++){
 
-                ushort[] channelData = new ushort[sizeRet];
+                ushort[] channelData = new ushort[returnedFrames];
 
-                for (int jj = 0; jj < sizeRet; jj++){
+                for (int jj = 0; jj < returnedFrames; jj++){
                     channelData[jj] = data[jj * mChannelHandles + ii];
                 }
             }
+            Console.WriteLine("returned frames: {0}", returnedFrames);
+            Console.WriteLine("Total amount of datapoints: {0}", returnedFrames*totalChannels);
         }
 
         void onError(String msg, int info){
+            Console.WriteLine(msg);
+            Console.WriteLine(info);
+            Console.WriteLine("Error!");
             device.StopDacq();
         }
 
         void channelDataHandler(ushort[] data, int offset){
+            Console.WriteLine("On data handler invoked");
             if (offset == 33){
                 sendData(data);
             }
@@ -115,12 +141,16 @@ namespace MeaExampleNet{
             Console.WriteLine("hheh");
         }
 
-        public void startDevice(){
+        public bool startDevice(){
+            Console.WriteLine("Starting device");
             device.StartDacq();
+            Console.WriteLine("Device started");
+            return true;
         }
 
-        public void stopDevice(){
+        public bool stopDevice(){
             device.StopDacq();
+            return true;
         }
     }
 }
