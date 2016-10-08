@@ -20,6 +20,9 @@ namespace MeaExampleNet{
         int block = 0;
         uint[] outputChannels;
 
+        int datawidth = 32;
+        bool datasign = true;
+
         const int samplingRate = 1000;
 
         delegate void onChannelDataDelegate(int[] data, int offset);
@@ -90,10 +93,24 @@ namespace MeaExampleNet{
 
             channelblocksize = samplingRate / 10;
 
+            SampleSizeNet datawidthToken = 0;
+            if(datawidth == 16){
+                if(datasign)
+                    datawidthToken = SampleSizeNet.SampleSize16Signed;
+                else
+                    datawidthToken = SampleSizeNet.SampleSize16Unsigned;
+            }
+            else{
+                if(datasign)
+                    datawidthToken = SampleSizeNet.SampleSize32Signed;
+                else
+                    datawidthToken = SampleSizeNet.SampleSize32Unsigned;
+            }
+
             device.SetSelectedData(selectedChannels,
                                   10 * channelblocksize,
                                   channelblocksize,
-                                  SampleSizeNet.SampleSize32Signed,
+                                  datawidthToken,
                                   block);
 
             mChannelHandles = block;
@@ -108,7 +125,15 @@ namespace MeaExampleNet{
             Console.WriteLine(che);
             Console.WriteLine(tim);
             Console.WriteLine(gain);
+            Console.WriteLine("" + device.GetVoltageRangeInMicroVolt() + "µV");
+            int validDataBits = -1;
+            int dataFormat = -1;
+            device.GetNumberOfDataBits(0, DacqGroupChannelEnumNet.HeadstageElectrodeGroup, out fug);
+            device.GetDataFormat(0, DacqGroupChannelEnumNet.HeadstageElectrodeGroup, out fug2);
+            Console.WriteLine(validDataBits);
+            Console.WriteLine(dataFormat);
 
+            for(int i = 0; i < 10; i++){ int crash = 1/i;}
             return true;
 
         }
@@ -127,7 +152,7 @@ namespace MeaExampleNet{
                     channelData[jj] = data[jj * mChannelHandles + ii];
                 }
 
-                if(ii == 20){
+                if(ii == 26){
                     for(int jj = 0; jj < returnedFrames; jj++){
                         Console.WriteLine(data[jj * mChannelHandles + ii]);
                     }
@@ -166,5 +191,9 @@ namespace MeaExampleNet{
             device.StopDacq();
             return true;
         }
+    }
+
+    // TODO should be used instead of just changing object state with activateDevice
+    public class DeviceInfo {
     }
 }
