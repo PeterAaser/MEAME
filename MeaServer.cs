@@ -18,12 +18,19 @@ namespace MeaExampleNet{
         int hwchannels = 0;
         int gain = 0;
         int block = 0;
+        uint[] outputChannels;
 
         const int samplingRate = 1000;
 
-        delegate void onChannelDataDelegate(ushort[] data, int offset);
+        delegate void onChannelDataDelegate(int[] data, int offset);
 
-        public MeaInterface(){}
+        public MeaInterface(){
+            outputChannels = new uint[4];
+        }
+
+        public void setOutputChannel(uint channel, int index){
+            outputChannels[index] = channel;
+        }
 
         public String[] getDeviceListDescriptors(){
             Console.WriteLine("getting descriptors");
@@ -67,6 +74,7 @@ namespace MeaExampleNet{
             device.GetChannelLayout(out ana, out digi, out che, out tim, out block, 0);
             block = device.GetChannelsInBlock(); // I guess
 
+
             device.SetSampleRate(samplingRate, 1, 0);
 
             int gain = device.GetGain();
@@ -85,7 +93,7 @@ namespace MeaExampleNet{
             device.SetSelectedData(selectedChannels,
                                   10 * channelblocksize,
                                   channelblocksize,
-                                  SampleSizeNet.SampleSize16Unsigned,
+                                  SampleSizeNet.SampleSize32Signed,
                                   block);
 
             mChannelHandles = block;
@@ -110,13 +118,19 @@ namespace MeaExampleNet{
             Console.WriteLine("getting the data, lads");
             int returnedFrames, totalChannels, offset, channels;
             device.ChannelBlock_GetChannel(0, 0, out totalChannels, out offset, out channels);
-            ushort[] data = device.ChannelBlock_ReadFramesUI16(0, channelblocksize, out returnedFrames);
+            int[] data = device.ChannelBlock_ReadFramesI32(0, channelblocksize, out returnedFrames);
             for (int ii = 0; ii < totalChannels; ii++){
 
-                ushort[] channelData = new ushort[returnedFrames];
+                int[] channelData = new int[returnedFrames];
 
                 for (int jj = 0; jj < returnedFrames; jj++){
                     channelData[jj] = data[jj * mChannelHandles + ii];
+                }
+
+                if(ii == 20){
+                    for(int jj = 0; jj < returnedFrames; jj++){
+                        Console.WriteLine(data[jj * mChannelHandles + ii]);
+                    }
                 }
             }
             Console.WriteLine("returned frames: {0}", returnedFrames);
@@ -130,14 +144,14 @@ namespace MeaExampleNet{
             device.StopDacq();
         }
 
-        void channelDataHandler(ushort[] data, int offset){
+        void channelDataHandler(int[] data, int offset){
             Console.WriteLine("On data handler invoked");
             if (offset == 33){
                 sendData(data);
             }
         }
 
-        void sendData(ushort[] data){
+        void sendData(int[] data){
             Console.WriteLine("hheh");
         }
 
