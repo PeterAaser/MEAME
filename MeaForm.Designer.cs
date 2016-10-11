@@ -57,6 +57,7 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(525, 241);
             this.panel1.TabIndex = 0;
+            // this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // panel2
             // 
@@ -102,6 +103,7 @@
             this.cbChannel.Name = "cbChannel";
             this.cbChannel.Size = new System.Drawing.Size(70, 21);
             this.cbChannel.TabIndex = 15;
+            this.cbChannel.SelectedIndexChanged += new System.EventHandler(this.cbChannel_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -187,6 +189,7 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(70, 21);
             this.comboBox1.TabIndex = 18;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // label5
             // 
@@ -205,6 +208,7 @@
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(70, 21);
             this.comboBox2.TabIndex = 22;
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
             // label6
             // 
@@ -223,6 +227,7 @@
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(70, 21);
             this.comboBox3.TabIndex = 20;
+            this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
             // 
             // MeaForm
             // 

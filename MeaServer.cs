@@ -128,12 +128,12 @@ namespace MeaExampleNet{
             Console.WriteLine("" + device.GetVoltageRangeInMicroVolt() + "µV");
             int validDataBits = -1;
             int dataFormat = -1;
-            device.GetNumberOfDataBits(0, DacqGroupChannelEnumNet.HeadstageElectrodeGroup, out fug);
-            device.GetDataFormat(0, DacqGroupChannelEnumNet.HeadstageElectrodeGroup, out fug2);
+            device.GetNumberOfDataBits(0, DacqGroupChannelEnumNet.HeadstageElectrodeGroup, out validDataBits);
+            device.GetDataFormat(0, DacqGroupChannelEnumNet.HeadstageElectrodeGroup, out dataFormat);
             Console.WriteLine(validDataBits);
             Console.WriteLine(dataFormat);
 
-            for(int i = 0; i < 10; i++){ int crash = 1/i;}
+            // for(int i = 0; i < 10; i++){ int crash = 1/i;}
             return true;
 
         }
