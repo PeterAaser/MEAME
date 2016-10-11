@@ -11,6 +11,7 @@ namespace MeaExampleNet{
 
         private readonly CMcsUsbListNet usblist = new CMcsUsbListNet();
         private CMeaDeviceNet device;
+        private MeaZMQ zmq = new MeaZMQ();
 
         int channelblocksize = 0;
         int mChannelHandles = 0;
@@ -152,14 +153,12 @@ namespace MeaExampleNet{
                     channelData[jj] = data[jj * mChannelHandles + ii];
                 }
 
-                if(ii == 26){
-                    for(int jj = 0; jj < returnedFrames; jj++){
-                        Console.WriteLine(data[jj * mChannelHandles + ii]);
-                    }
+                if(ii == 26 || ii == 27 || ii == 28 || ii == 29){
+                    zmq.sendData(channelData, ii);
                 }
             }
-            Console.WriteLine("returned frames: {0}", returnedFrames);
-            Console.WriteLine("Total amount of datapoints: {0}", returnedFrames*totalChannels);
+            // Console.WriteLine("returned frames: {0}", returnedFrames);
+            // Console.WriteLine("Total amount of datapoints: {0}", returnedFrames*totalChannels);
         }
 
         void onError(String msg, int info){
