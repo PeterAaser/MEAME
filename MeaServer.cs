@@ -11,6 +11,7 @@ namespace MeaExampleNet{
 
         private readonly CMcsUsbListNet usblist = new CMcsUsbListNet();
         private CMeaDeviceNet device;
+        private CStg200xDownloadNet stg;
         private MeaZMQ zmq = new MeaZMQ();
 
         int channelblocksize = 0;
@@ -31,6 +32,7 @@ namespace MeaExampleNet{
         public MeaInterface(){
             outputChannels = new uint[4];
         }
+
 
         public void setOutputChannel(uint channel, int index){
             outputChannels[index] = channel;
@@ -65,6 +67,9 @@ namespace MeaExampleNet{
             device = new CMeaDeviceNet(usblist.GetUsbListEntry(index).DeviceId.BusType,
                                        onChannelData,
                                        onError);
+
+            stg = new CStg200xDownloadNet(pollHandler);
+            stg.Connect(usblist.GetUsbListEntry(index));
 
             device.Connect(usblist.GetUsbListEntry(index));
             device.SendStop();
@@ -141,7 +146,6 @@ namespace MeaExampleNet{
 
         void onChannelData(CMcsUsbDacqNet d, int cbHandle, int numSamples){
 
-            Console.WriteLine("getting the data, lads");
             int returnedFrames, totalChannels, offset, channels;
             device.ChannelBlock_GetChannel(0, 0, out totalChannels, out offset, out channels);
             int[] data = device.ChannelBlock_ReadFramesI32(0, channelblocksize, out returnedFrames);
@@ -157,8 +161,6 @@ namespace MeaExampleNet{
                     zmq.sendData(channelData, ii);
                 }
             }
-            // Console.WriteLine("returned frames: {0}", returnedFrames);
-            // Console.WriteLine("Total amount of datapoints: {0}", returnedFrames*totalChannels);
         }
 
         void onError(String msg, int info){
