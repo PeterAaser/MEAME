@@ -61,7 +61,7 @@ namespace MeaExampleNet{
 
         // Start button clicked
         private void btStart_Click(object sender, EventArgs e){
-            if(meaInterface.activateDevice((uint)cbDevices.SelectedIndex)){
+            if(meaInterface.connectDataAcquisitionDevice((uint)cbDevices.SelectedIndex)){
                 meaInterface.startDevice();
                 btStart.Enabled = false;
                 btStop.Enabled = true;
@@ -96,6 +96,11 @@ namespace MeaExampleNet{
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e){
             meaInterface.setOutputChannel((uint)comboBox3.SelectedIndex, 1);
             Console.WriteLine("panel 3 reading channel {0}", comboBox3.SelectedIndex);
+        }
+
+        private void MeaForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

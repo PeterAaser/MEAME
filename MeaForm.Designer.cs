@@ -57,7 +57,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(525, 241);
             this.panel1.TabIndex = 0;
-            // this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // panel2
             // 
@@ -255,6 +254,7 @@
             this.Controls.Add(this.panel1);
             this.Name = "MeaForm";
             this.Text = "Form2";
+            this.Load += new System.EventHandler(this.MeaForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

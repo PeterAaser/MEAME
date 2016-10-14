@@ -10,8 +10,7 @@ namespace MeaExampleNet{
     public class MeaInterface {
 
         private readonly CMcsUsbListNet usblist = new CMcsUsbListNet();
-        private CMeaDeviceNet device;
-        private CStg200xDownloadNet stg;
+        private CMeaDeviceNet dataAcquisitionDevice;
         private MeaZMQ zmq = new MeaZMQ();
 
         int channelblocksize = 0;
@@ -54,75 +53,61 @@ namespace MeaExampleNet{
         }
 
 
-        public bool activateDevice(uint index){
-            Console.WriteLine("activating device");
+        // TODO move hardcoded data to arg list
+        public bool connectDataAcquisitionDevice(uint index, SampleSizeNet dataFormat = SampleSizeNet.SampleSize32Signed){
 
-            if(device != null){
-                device.StopDacq();
-                device.Disconnect();
-                device.Dispose();
-                device = null;
+            Console.WriteLine("Connecting data acquisition object to device");
+
+            if(dataAcquisitionDevice != null){
+                dataAcquisitionDevice.StopDacq();
+                dataAcquisitionDevice.Disconnect();
+                dataAcquisitionDevice.Dispose();
+                dataAcquisitionDevice = null;
             }
 
-            device = new CMeaDeviceNet(usblist.GetUsbListEntry(index).DeviceId.BusType,
+            dataAcquisitionDevice = new CMeaDeviceNet(usblist.GetUsbListEntry(index).DeviceId.BusType,
                                        onChannelData,
                                        onError);
 
-            stg = new CStg200xDownloadNet(pollHandler);
-            stg.Connect(usblist.GetUsbListEntry(index));
+            // The second arg refers to lock mask, allowing multiple device objects to be connected
+            // to the same physical device. Yes, I know, what the fuck...
+            dataAcquisitionDevice.Connect(usblist.GetUsbListEntry(index), 1);
+            dataAcquisitionDevice.SendStop();
 
-            device.Connect(usblist.GetUsbListEntry(index));
-            device.SendStop();
-
-            device.HWInfo().GetNumberOfHWADCChannels(out hwchannels);
+            dataAcquisitionDevice.HWInfo().GetNumberOfHWADCChannels(out hwchannels);
             if (hwchannels == 0){ hwchannels = 64;}
 
-            device.SetNumberOfChannels(hwchannels);
+            dataAcquisitionDevice.SetNumberOfChannels(hwchannels);
 
             int ana, digi, che, tim, block;
-            device.GetChannelLayout(out ana, out digi, out che, out tim, out block, 0);
-            block = device.GetChannelsInBlock(); // I guess
+            dataAcquisitionDevice.GetChannelLayout(out ana, out digi, out che, out tim, out block, 0);
+            block = dataAcquisitionDevice.GetChannelsInBlock(); // I guess
 
+            dataAcquisitionDevice.SetSampleRate(samplingRate, 1, 0);
 
-            device.SetSampleRate(samplingRate, 1, 0);
-
-            int gain = device.GetGain();
+            int gain = dataAcquisitionDevice.GetGain();
 
             List<CMcsUsbDacqNet.CHWInfo.CVoltageRangeInfoNet> voltageranges;
-            device.HWInfo().GetAvailableVoltageRangesInMicroVoltAndStringsInMilliVolt(out voltageranges);
-            device.EnableDigitalIn(true, 0);
-            device.EnableChecksum(true, 0);
+            dataAcquisitionDevice.HWInfo().GetAvailableVoltageRangesInMicroVoltAndStringsInMilliVolt(out voltageranges);
+            dataAcquisitionDevice.EnableDigitalIn(true, 0);
+            dataAcquisitionDevice.EnableChecksum(true, 0);
 
             bool[] selectedChannels = new bool[block];
             for (int i = 0; i < block; i++){ selectedChannels[i] = true; } // hurr
 
-
             channelblocksize = samplingRate / 10;
 
-            SampleSizeNet datawidthToken = 0;
-            if(datawidth == 16){
-                if(datasign)
-                    datawidthToken = SampleSizeNet.SampleSize16Signed;
-                else
-                    datawidthToken = SampleSizeNet.SampleSize16Unsigned;
-            }
-            else{
-                if(datasign)
-                    datawidthToken = SampleSizeNet.SampleSize32Signed;
-                else
-                    datawidthToken = SampleSizeNet.SampleSize32Unsigned;
-            }
-
-            device.SetSelectedData(selectedChannels,
+            dataAcquisitionDevice.SetSelectedData(selectedChannels,
                                   10 * channelblocksize,
                                   channelblocksize,
-                                  datawidthToken,
+                                  dataFormat,
                                   block);
 
             mChannelHandles = block;
 
-            device.ChannelBlock_SetCheckChecksum((uint)che, (uint)tim); // ???
+            dataAcquisitionDevice.ChannelBlock_SetCheckChecksum((uint)che, (uint)tim); // ???
 
+            {
             Console.WriteLine(block);
             Console.WriteLine(samplingRate);
             Console.WriteLine(hwchannels);
@@ -131,24 +116,27 @@ namespace MeaExampleNet{
             Console.WriteLine(che);
             Console.WriteLine(tim);
             Console.WriteLine(gain);
-            Console.WriteLine("" + device.GetVoltageRangeInMicroVolt() + "µV");
+            Console.WriteLine("" + dataAcquisitionDevice.GetVoltageRangeInMicroVolt() + "µV");
             int validDataBits = -1;
-            int dataFormat = -1;
-            device.GetNumberOfDataBits(0, DacqGroupChannelEnumNet.HeadstageElectrodeGroup, out validDataBits);
-            device.GetDataFormat(0, DacqGroupChannelEnumNet.HeadstageElectrodeGroup, out dataFormat);
+            int deviceDataFormat = -1;
+            dataAcquisitionDevice.GetNumberOfDataBits(0, DacqGroupChannelEnumNet.HeadstageElectrodeGroup, out validDataBits);
+            dataAcquisitionDevice.GetDataFormat(0, DacqGroupChannelEnumNet.HeadstageElectrodeGroup, out deviceDataFormat);
             Console.WriteLine(validDataBits);
-            Console.WriteLine(dataFormat);
+            Console.WriteLine(deviceDataFormat);
 
             // for(int i = 0; i < 10; i++){ int crash = 1/i;}
+            }
+
             return true;
 
         }
 
+
         void onChannelData(CMcsUsbDacqNet d, int cbHandle, int numSamples){
 
             int returnedFrames, totalChannels, offset, channels;
-            device.ChannelBlock_GetChannel(0, 0, out totalChannels, out offset, out channels);
-            int[] data = device.ChannelBlock_ReadFramesI32(0, channelblocksize, out returnedFrames);
+            dataAcquisitionDevice.ChannelBlock_GetChannel(0, 0, out totalChannels, out offset, out channels);
+            int[] data = dataAcquisitionDevice.ChannelBlock_ReadFramesI32(0, channelblocksize, out returnedFrames);
             for (int ii = 0; ii < totalChannels; ii++){
 
                 int[] channelData = new int[returnedFrames];
@@ -167,7 +155,7 @@ namespace MeaExampleNet{
             Console.WriteLine(msg);
             Console.WriteLine(info);
             Console.WriteLine("Error!");
-            device.StopDacq();
+            dataAcquisitionDevice.StopDacq();
         }
 
         void channelDataHandler(int[] data, int offset){
@@ -183,13 +171,13 @@ namespace MeaExampleNet{
 
         public bool startDevice(){
             Console.WriteLine("Starting device");
-            device.StartDacq();
+            dataAcquisitionDevice.StartDacq();
             Console.WriteLine("Device started");
             return true;
         }
 
         public bool stopDevice(){
-            device.StopDacq();
+            dataAcquisitionDevice.StopDacq();
             return true;
         }
     }

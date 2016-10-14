@@ -47,7 +47,6 @@ namespace MeaExampleNet{
 
             using (var updateFrame = new ZFrame("1 " + json)){
                 meaPublisher.Send(updateFrame);
-                Console.WriteLine("message sent");
             }
         }
     }
