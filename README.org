@@ -1,0 +1,4 @@
+* MEAME
+
+  Currently not in a functional state, but should offer some insight into developing software
+  for close to real time closed loop systems using the MEA2100 system
