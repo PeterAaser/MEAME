@@ -20,11 +20,10 @@ namespace MeaExampleNet{
         public MeaForm(){
             InitializeComponent();
             meaInterface = new MeaInterface();
+
             for(int i = 0; i < 100; i++){
-                cbChannel.Items.Add(i);
-                comboBox1.Items.Add(i);
-                comboBox2.Items.Add(i);
-                comboBox3.Items.Add(i);
+                cbChannel.Items.Add(i); comboBox1.Items.Add(i);
+                comboBox2.Items.Add(i); comboBox3.Items.Add(i);
             }
         }
 
@@ -61,16 +60,25 @@ namespace MeaExampleNet{
 
         // Start button clicked
         private void btStart_Click(object sender, EventArgs e){
-            if(meaInterface.connectDataAcquisitionDevice((uint)cbDevices.SelectedIndex)){
+            if(meaInterface
+               .dataAcquisitionDevice
+               .connectDataAcquisitionDevice((uint)cbDevices.SelectedIndex)
+               // &&
+               // meaInterface
+               // .stgDevice
+               // .connectSTGDevice((uint)cbDevices.SelectedIndex)
+               ){
+
                 meaInterface.startDevice();
                 btStart.Enabled = false;
+                button1.Enabled = true;
                 btStop.Enabled = true;
             }
         }
 
         // Stop button clicked
         private void btStop_Click(object sender, EventArgs e){
-            if(meaInterface.stopDevice()){
+            if(meaInterface.dataAcquisitionDevice.stopDevice()){
                 btStop.Enabled = false;
                 btStart.Enabled = true;
             }
@@ -79,28 +87,33 @@ namespace MeaExampleNet{
 
         // really...
         private void cbChannel_SelectedIndexChanged(object sender, EventArgs e){
-            meaInterface.setOutputChannel((uint)cbChannel.SelectedIndex, 0);
+            // meaInterface.setOutputChannel((uint)cbChannel.SelectedIndex, 0);
             Console.WriteLine("panel 0 reading channel {0}", cbChannel.SelectedIndex);
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e){
-            meaInterface.setOutputChannel((uint)comboBox1.SelectedIndex, 2);
+            // meaInterface.setOutputChannel((uint)comboBox1.SelectedIndex, 2);
             Console.WriteLine("panel 1 reading channel {0}", comboBox1.SelectedIndex);
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e){
-            meaInterface.setOutputChannel((uint)comboBox2.SelectedIndex, 3);
+            // meaInterface.setOutputChannel((uint)comboBox2.SelectedIndex, 3);
             Console.WriteLine("panel 2 reading channel {0}", comboBox2.SelectedIndex);
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e){
-            meaInterface.setOutputChannel((uint)comboBox3.SelectedIndex, 1);
+            // meaInterface.setOutputChannel((uint)comboBox3.SelectedIndex, 1);
             Console.WriteLine("panel 3 reading channel {0}", comboBox3.SelectedIndex);
         }
 
         private void MeaForm_Load(object sender, EventArgs e)
         {
+        }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("Ahh yeah that's the stuff");
+            meaInterface.stgDevice.stimpack();
         }
     }
 }

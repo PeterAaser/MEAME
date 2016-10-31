@@ -11,7 +11,7 @@ namespace MeaExampleNet{
 
     using Mcs.Usb;
 
-    public class STGInterface {
+    public class MeaSTG {
 
 
         private readonly CMcsUsbListNet usblist = new CMcsUsbListNet();
@@ -48,7 +48,7 @@ namespace MeaExampleNet{
 
             // Toggle the Amplifier Protection Switch while stimulation is in progress.
             // In the MCS example it is turned off.
-            stgDevice.SetEnableAmplifierProtectionSwitch(electrode, true);
+            stgDevice.SetEnableAmplifierProtectionSwitch(electrode, false);
 
             // Toggle voltage stimulation as opposed to current stimulation.
             // Voltage stimulation seems to be agreed upon to be a better choice for neurons
@@ -56,6 +56,8 @@ namespace MeaExampleNet{
             // However, in that same example current is set during setup and memory load so might
             // be contextual..
             stgDevice.SetVoltageMode();
+
+            setupDeviceMemory();
 
             return true;
         }
@@ -77,6 +79,11 @@ namespace MeaExampleNet{
             // connect all stimulation channels to the first trigger
             stgDevice.SetupTrigger(0, new uint[] { 255 }, new uint[] { 255 }, new uint[] { 1 });
 
+        }
+
+        public void stimpack(){
+            // stgDevice.SendStart(1);
+            stgDevice.SendStop(1);
         }
     }
 }
