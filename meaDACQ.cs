@@ -67,6 +67,9 @@ namespace MeaExampleNet{
             dataAcquisitionDevice.HWInfo().GetNumberOfHWADCChannels(out hwchannels);
 
             dataAcquisitionDevice.SetNumberOfChannels(hwchannels);
+            dataAcquisitionDevice.EnableDigitalIn(true, 0);
+            dataAcquisitionDevice.EnableChecksum(true, 0);
+            dataAcquisitionDevice.SetDataMode(DataModeEnumNet.dmSigned32bit, 0);
 
             int ana, digi, che, tim, block;
             dataAcquisitionDevice.GetChannelLayout(out ana, out digi, out che, out tim, out block, 0);
@@ -79,8 +82,6 @@ namespace MeaExampleNet{
             dataAcquisitionDevice.HWInfo().
                 GetAvailableVoltageRangesInMicroVoltAndStringsInMilliVolt(out voltageranges);
 
-            dataAcquisitionDevice.EnableDigitalIn(true, 0);
-            dataAcquisitionDevice.EnableChecksum(true, 0);
 
             bool[] selectedChannels = new bool[block];
             for (int i = 0; i < block; i++){ selectedChannels[i] = true; } // hurr
@@ -157,6 +158,7 @@ namespace MeaExampleNet{
                     channelData[jj] = data[jj * mChannelHandles + ii];
                 }
 
+                // we're hardcoding which channels to be read at the moment
                 if(ii == 32 || ii == 33 || ii == 34 || ii == 35){
                     zmq.sendData(channelData, ii);
                 }
