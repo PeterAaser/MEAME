@@ -15,6 +15,7 @@ namespace MeaExampleNet{
     public partial class MeaForm : Form{
 
         public MeaInterface meaInterface;
+        public DSPComms dspInterface;
         private bool running = false;
 
         public MeaForm(){
@@ -40,6 +41,7 @@ namespace MeaExampleNet{
             if (cbDevices.Items.Count > 0){
                 cbDevices.SelectedIndex = 0;
                 btStart.Enabled = true;
+                button1.Enabled = true;
             }
         }
 
@@ -110,10 +112,28 @@ namespace MeaExampleNet{
         {
         }
 
+        // connect stims
         private void button1_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("Ahh yeah that's the stuff");
-            meaInterface.stgDevice.stimpack();
+            Console.WriteLine("Attempting to connect to DSP");
+            dspInterface = new DSPComms();
+            if(dspInterface.connected){
+                textBox1.Enabled = true;
+                button2.Enabled = true;
+            }
+        }
+
+        // new stim freq
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        // set new stim
+        private void button2_Click(object sender, EventArgs e)
+        {
+            int stimFreq = Convert.ToInt32(textBox1.Text);
+            dspInterface.triggerStimReg((uint)stimFreq);
         }
     }
 }
