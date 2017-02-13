@@ -28,64 +28,106 @@ namespace MeaExampleNet{
             }
         }
 
-        // Device present button
-        private void btMeaDevice_present_Click(object sender, EventArgs e){
-
-            cbDevices.Items.Clear();
-            String[] deviceList = meaInterface.getDeviceListDescriptors();
-
-            foreach(string device in deviceList){
-                cbDevices.Items.Add(device);
-            }
-
-            if (cbDevices.Items.Count > 0){
-                cbDevices.SelectedIndex = 0;
-                btStart.Enabled = true;
-                button1.Enabled = true;
-            }
-        }
 
         // Selected device combobox changed
-        private void CbDevicesSelectedIndexChanged(object sender, EventArgs e){
-            uint selectedDeviceIndex = (uint)cbDevices.SelectedIndex;
+        private void Devices_combobox_SelectedIndexChanged(object sender, EventArgs e){
+            uint selectedDeviceIndex = (uint)Devices_combobox.SelectedIndex;
 
             // a uint can never be less than zero, but maybe it's like this for a reason?
             if (selectedDeviceIndex >= 0){
-                btStart.Enabled = true;
+                MEA_start_button.Enabled = true;
                 Console.WriteLine("no device");
             } else {
-                btStart.Enabled = false;
+                MEA_start_button.Enabled = false;
                 Console.WriteLine("device..?");
             }
-
         }
 
-        // Start button clicked
-        private void btStart_Click(object sender, EventArgs e){
+
+
+        private void Refresh_MEA_Devices(object sender, EventArgs e)
+        {
+            Devices_combobox.Items.Clear();
+            String[] deviceList = meaInterface.getDeviceListDescriptors();
+
+            foreach(string device in deviceList){
+                Devices_combobox.Items.Add(device);
+            }
+
+            if (Devices_combobox.Items.Count > 0){
+                Devices_combobox.SelectedIndex = 0;
+                MEA_start_button.Enabled = true;
+                MEA_connect_button.Enabled = true;
+                connect_DSP_button.Enabled = true;
+                Console.WriteLine("we on");
+            }
+        }
+
+
+        private void Connect_MEA_click(object sender, EventArgs e)
+        {
+        }
+
+
+        private void MEA_start_click(object sender, EventArgs e)
+        {
             if(meaInterface
                .dataAcquisitionDevice
-               .connectDataAcquisitionDevice((uint)cbDevices.SelectedIndex)
-               // &&
-               // meaInterface
-               // .stgDevice
-               // .connectSTGDevice((uint)cbDevices.SelectedIndex)
-               ){
-
+               .connectDataAcquisitionDevice((uint)Devices_combobox.SelectedIndex))
+            {
                 meaInterface.startDevice();
-                btStart.Enabled = false;
-                button1.Enabled = true;
-                btStop.Enabled = true;
+                MEA_start_button.Enabled = false;
+                MEA_connect_button.Enabled = true;
+                MEA_stop_button.Enabled = true;
             }
         }
 
-        // Stop button clicked
-        private void btStop_Click(object sender, EventArgs e){
+
+        private void MEA_stop_click(object sender, EventArgs e)
+        {
             if(meaInterface.dataAcquisitionDevice.stopDevice()){
-                btStop.Enabled = false;
-                btStart.Enabled = true;
+                MEA_stop_button.Enabled = false;
+                MEA_start_button.Enabled = true;
             }
         }
 
+
+
+        private void connect_DSP_click(object sender, EventArgs e)
+        {
+            Console.WriteLine("Attempting to connect to DSP");
+            dspInterface = new DSPComms();
+            if(dspInterface.connected){
+                Console.WriteLine("Connection successful");
+                Frequency_textbox.Enabled = true;
+                DSP_start_button.Enabled = true;
+            }
+            else{
+                Console.WriteLine("Connection failed");
+            }
+        }
+
+        private void DSP_load_binary_clicked(object sender, EventArgs e)
+        {
+
+        }
+
+
+        private void DSP_start_click(object sender, EventArgs e)
+        {
+
+        }
+
+
+        private void DSP_stop_click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Frequency_textbox_changed(object sender, EventArgs e)
+        {
+
+        }
 
         // really...
         private void cbChannel_SelectedIndexChanged(object sender, EventArgs e){
@@ -108,32 +150,10 @@ namespace MeaExampleNet{
             Console.WriteLine("panel 3 reading channel {0}", comboBox3.SelectedIndex);
         }
 
+
         private void MeaForm_Load(object sender, EventArgs e)
         {
         }
 
-        // connect stims
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Console.WriteLine("Attempting to connect to DSP");
-            dspInterface = new DSPComms();
-            if(dspInterface.connected){
-                textBox1.Enabled = true;
-                button2.Enabled = true;
-            }
-        }
-
-        // new stim freq
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        // set new stim
-        private void button2_Click(object sender, EventArgs e)
-        {
-            int stimFreq = Convert.ToInt32(textBox1.Text);
-            dspInterface.triggerStimReg((uint)stimFreq);
-        }
     }
 }

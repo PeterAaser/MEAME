@@ -10,13 +10,14 @@ namespace MeaExampleNet{
     public class MeaInterface {
 
         private readonly CMcsUsbListNet usblist = new CMcsUsbListNet();
-        public MeaDACQ dataAcquisitionDevice;
+        public DAQ dataAcquisitionDevice;
         public MeaSTG stgDevice;
         private MeaZMQ zmq = new MeaZMQ();
 
         public MeaInterface(){
-            dataAcquisitionDevice = new MeaDACQ(zmq);
-            // stgDevice = new MeaSTG();
+            dataAcquisitionDevice = new DAQ{samplerate = 40000,
+                                            channelBlockSize = 64,
+                                            onChannelData = DAQ.simpleChannelData };
         }
 
         public String[] getDeviceListDescriptors(){
@@ -44,6 +45,4 @@ namespace MeaExampleNet{
             return true;
         }
     }
-
-    // TODO should be used instead of just changing object state with activateDevice
 }
