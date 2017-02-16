@@ -42,7 +42,6 @@ namespace MeaExampleNet
             this.label1 = new System.Windows.Forms.Label();
             this.Devices_combobox = new System.Windows.Forms.ComboBox();
             this.Refresh_Devices_button = new System.Windows.Forms.Button();
-            this.tbDeviceInfo = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -55,8 +54,25 @@ namespace MeaExampleNet
             this.label7 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
             this.DSP_start_button = new System.Windows.Forms.Button();
-            this.DSP_load_binary = new System.Windows.Forms.Button();
+            this.DSP_load_binary_button = new System.Windows.Forms.Button();
             this.DSP_stop_button = new System.Windows.Forms.Button();
+            this.mail_text = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.req_id_text = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.electrodes1_text = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.dac_id_text = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.request_ACK_text = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.sample_text = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.period_text = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.electrodes2_text = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.request_stim_button = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // panel1
@@ -174,14 +190,6 @@ namespace MeaExampleNet
             this.Refresh_Devices_button.UseVisualStyleBackColor = true;
             this.Refresh_Devices_button.Click += new System.EventHandler(this.Refresh_MEA_Devices);
             // 
-            // tbDeviceInfo
-            // 
-            this.tbDeviceInfo.Location = new System.Drawing.Point(12, 269);
-            this.tbDeviceInfo.Multiline = true;
-            this.tbDeviceInfo.Name = "tbDeviceInfo";
-            this.tbDeviceInfo.Size = new System.Drawing.Size(525, 241);
-            this.tbDeviceInfo.TabIndex = 17;
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -293,7 +301,7 @@ namespace MeaExampleNet
             // DSP_start_button
             // 
             this.DSP_start_button.Enabled = false;
-            this.DSP_start_button.Location = new System.Drawing.Point(93, 205);
+            this.DSP_start_button.Location = new System.Drawing.Point(13, 233);
             this.DSP_start_button.Name = "DSP_start_button";
             this.DSP_start_button.Size = new System.Drawing.Size(75, 23);
             this.DSP_start_button.TabIndex = 30;
@@ -301,33 +309,206 @@ namespace MeaExampleNet
             this.DSP_start_button.UseVisualStyleBackColor = true;
             this.DSP_start_button.Click += new System.EventHandler(this.DSP_start_click);
             // 
-            // DSP_load_binary
+            // DSP_load_binary_button
             // 
-            this.DSP_load_binary.Enabled = false;
-            this.DSP_load_binary.Location = new System.Drawing.Point(13, 205);
-            this.DSP_load_binary.Name = "DSP_load_binary";
-            this.DSP_load_binary.Size = new System.Drawing.Size(75, 23);
-            this.DSP_load_binary.TabIndex = 32;
-            this.DSP_load_binary.Text = "Set frequency";
-            this.DSP_load_binary.UseVisualStyleBackColor = true;
-            this.DSP_load_binary.Click += new System.EventHandler(this.DSP_load_binary_clicked);
+            this.DSP_load_binary_button.Enabled = false;
+            this.DSP_load_binary_button.Location = new System.Drawing.Point(13, 205);
+            this.DSP_load_binary_button.Name = "DSP_load_binary_button";
+            this.DSP_load_binary_button.Size = new System.Drawing.Size(155, 23);
+            this.DSP_load_binary_button.TabIndex = 32;
+            this.DSP_load_binary_button.Text = "Load binary";
+            this.DSP_load_binary_button.UseVisualStyleBackColor = true;
+            this.DSP_load_binary_button.Click += new System.EventHandler(this.DSP_load_binary_clicked);
             // 
             // DSP_stop_button
             // 
             this.DSP_stop_button.Enabled = false;
-            this.DSP_stop_button.Location = new System.Drawing.Point(13, 234);
+            this.DSP_stop_button.Location = new System.Drawing.Point(94, 233);
             this.DSP_stop_button.Name = "DSP_stop_button";
             this.DSP_stop_button.Size = new System.Drawing.Size(75, 23);
             this.DSP_stop_button.TabIndex = 31;
-            this.DSP_stop_button.Text = "Set frequency";
+            this.DSP_stop_button.Text = "Stop";
             this.DSP_stop_button.UseVisualStyleBackColor = true;
+            this.DSP_stop_button.Click += new System.EventHandler(this.DSP_stop_click);
+            // 
+            // mail_text
+            // 
+            this.mail_text.Location = new System.Drawing.Point(107, 307);
+            this.mail_text.Margin = new System.Windows.Forms.Padding(1);
+            this.mail_text.Name = "mail_text";
+            this.mail_text.Size = new System.Drawing.Size(95, 20);
+            this.mail_text.TabIndex = 45;
+            this.mail_text.Text = "Frequency";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(33, 333);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(33, 13);
+            this.label9.TabIndex = 48;
+            this.label9.Text = "req id";
+            // 
+            // req_id_text
+            // 
+            this.req_id_text.Location = new System.Drawing.Point(107, 330);
+            this.req_id_text.Margin = new System.Windows.Forms.Padding(1);
+            this.req_id_text.Name = "req_id_text";
+            this.req_id_text.Size = new System.Drawing.Size(95, 20);
+            this.req_id_text.TabIndex = 47;
+            this.req_id_text.Text = "Frequency";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(33, 380);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(65, 13);
+            this.label10.TabIndex = 52;
+            this.label10.Text = "electrodes 1";
+            // 
+            // electrodes1_text
+            // 
+            this.electrodes1_text.Location = new System.Drawing.Point(107, 377);
+            this.electrodes1_text.Margin = new System.Windows.Forms.Padding(1);
+            this.electrodes1_text.Name = "electrodes1_text";
+            this.electrodes1_text.Size = new System.Drawing.Size(95, 20);
+            this.electrodes1_text.TabIndex = 51;
+            this.electrodes1_text.Text = "Frequency";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(33, 357);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(36, 13);
+            this.label11.TabIndex = 50;
+            this.label11.Text = "dac id";
+            // 
+            // dac_id_text
+            // 
+            this.dac_id_text.Location = new System.Drawing.Point(107, 354);
+            this.dac_id_text.Margin = new System.Windows.Forms.Padding(1);
+            this.dac_id_text.Name = "dac_id_text";
+            this.dac_id_text.Size = new System.Drawing.Size(95, 20);
+            this.dac_id_text.TabIndex = 49;
+            this.dac_id_text.Text = "Frequency";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(33, 474);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(66, 13);
+            this.label12.TabIndex = 60;
+            this.label12.Text = "request ACK";
+            // 
+            // request_ACK_text
+            // 
+            this.request_ACK_text.Location = new System.Drawing.Point(107, 471);
+            this.request_ACK_text.Margin = new System.Windows.Forms.Padding(1);
+            this.request_ACK_text.Name = "request_ACK_text";
+            this.request_ACK_text.Size = new System.Drawing.Size(95, 20);
+            this.request_ACK_text.TabIndex = 59;
+            this.request_ACK_text.Text = "Frequency";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(33, 451);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(40, 13);
+            this.label13.TabIndex = 58;
+            this.label13.Text = "sample";
+            // 
+            // sample_text
+            // 
+            this.sample_text.Location = new System.Drawing.Point(107, 448);
+            this.sample_text.Margin = new System.Windows.Forms.Padding(1);
+            this.sample_text.Name = "sample_text";
+            this.sample_text.Size = new System.Drawing.Size(95, 20);
+            this.sample_text.TabIndex = 57;
+            this.sample_text.Text = "Frequency";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(33, 427);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(36, 13);
+            this.label14.TabIndex = 56;
+            this.label14.Text = "period";
+            // 
+            // period_text
+            // 
+            this.period_text.Location = new System.Drawing.Point(107, 424);
+            this.period_text.Margin = new System.Windows.Forms.Padding(1);
+            this.period_text.Name = "period_text";
+            this.period_text.Size = new System.Drawing.Size(95, 20);
+            this.period_text.TabIndex = 55;
+            this.period_text.Text = "Frequency";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(33, 404);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(65, 13);
+            this.label15.TabIndex = 54;
+            this.label15.Text = "electrodes 2";
+            // 
+            // electrodes2_text
+            // 
+            this.electrodes2_text.Location = new System.Drawing.Point(107, 401);
+            this.electrodes2_text.Margin = new System.Windows.Forms.Padding(1);
+            this.electrodes2_text.Name = "electrodes2_text";
+            this.electrodes2_text.Size = new System.Drawing.Size(95, 20);
+            this.electrodes2_text.TabIndex = 53;
+            this.electrodes2_text.Text = "Frequency";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(33, 310);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(51, 13);
+            this.label8.TabIndex = 77;
+            this.label8.Text = "mail base";
+            // 
+            // request_stim_button
+            // 
+            this.request_stim_button.Enabled = false;
+            this.request_stim_button.Location = new System.Drawing.Point(13, 262);
+            this.request_stim_button.Name = "request_stim_button";
+            this.request_stim_button.Size = new System.Drawing.Size(156, 23);
+            this.request_stim_button.TabIndex = 78;
+            this.request_stim_button.Text = "Request stim";
+            this.request_stim_button.UseVisualStyleBackColor = true;
+            this.request_stim_button.Click += new System.EventHandler(this.request_stim_button_Click);
             // 
             // MeaForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1078, 674);
-            this.Controls.Add(this.DSP_load_binary);
+            this.Controls.Add(this.request_stim_button);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.request_ACK_text);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.sample_text);
+            this.Controls.Add(this.label14);
+            this.Controls.Add(this.period_text);
+            this.Controls.Add(this.label15);
+            this.Controls.Add(this.electrodes2_text);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.electrodes1_text);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.dac_id_text);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.req_id_text);
+            this.Controls.Add(this.mail_text);
+            this.Controls.Add(this.DSP_load_binary_button);
             this.Controls.Add(this.DSP_stop_button);
             this.Controls.Add(this.DSP_start_button);
             this.Controls.Add(this.button3);
@@ -341,7 +522,6 @@ namespace MeaExampleNet
             this.Controls.Add(this.comboBox3);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.tbDeviceInfo);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.cbChannel);
             this.Controls.Add(this.label2);
@@ -357,7 +537,6 @@ namespace MeaExampleNet
             this.Name = "MeaForm";
             this.Text = "Form2";
             this.Load += new System.EventHandler(this.MeaForm_Load);
-            this.Click += new System.EventHandler(this.DSP_stop_click);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -382,7 +561,6 @@ namespace MeaExampleNet
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox Devices_combobox;
         private System.Windows.Forms.Button Refresh_Devices_button;
-        private System.Windows.Forms.TextBox tbDeviceInfo;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label5;
@@ -395,7 +573,24 @@ namespace MeaExampleNet
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button DSP_start_button;
-        private System.Windows.Forms.Button DSP_load_binary;
+        private System.Windows.Forms.Button DSP_load_binary_button;
         private System.Windows.Forms.Button DSP_stop_button;
+        private System.Windows.Forms.TextBox mail_text;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox req_id_text;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox electrodes1_text;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox dac_id_text;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox request_ACK_text;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox sample_text;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox period_text;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox electrodes2_text;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button request_stim_button;
     }
 }

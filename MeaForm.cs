@@ -34,12 +34,11 @@ namespace MeaExampleNet{
             uint selectedDeviceIndex = (uint)Devices_combobox.SelectedIndex;
 
             // a uint can never be less than zero, but maybe it's like this for a reason?
+            // TODO: relic, should be removed
             if (selectedDeviceIndex >= 0){
                 MEA_start_button.Enabled = true;
-                Console.WriteLine("no device");
             } else {
                 MEA_start_button.Enabled = false;
-                Console.WriteLine("device..?");
             }
         }
 
@@ -54,11 +53,14 @@ namespace MeaExampleNet{
                 Devices_combobox.Items.Add(device);
             }
 
+            MEA_connect_button.Enabled =
+                (deviceList.Any(p => p[p.Length - 1] == 'A'));
+
+            connect_DSP_button.Enabled =
+                (deviceList.Any(p => p[p.Length - 1] == 'B'));
+
             if (Devices_combobox.Items.Count > 0){
                 Devices_combobox.SelectedIndex = 0;
-                MEA_start_button.Enabled = true;
-                MEA_connect_button.Enabled = true;
-                connect_DSP_button.Enabled = true;
                 Console.WriteLine("we on");
             }
         }
@@ -66,6 +68,7 @@ namespace MeaExampleNet{
 
         private void Connect_MEA_click(object sender, EventArgs e)
         {
+            Console.WriteLine("Not implemented atm");
         }
 
 
@@ -92,7 +95,6 @@ namespace MeaExampleNet{
         }
 
 
-
         private void connect_DSP_click(object sender, EventArgs e)
         {
             Console.WriteLine("Attempting to connect to DSP");
@@ -101,15 +103,18 @@ namespace MeaExampleNet{
                 Console.WriteLine("Connection successful");
                 Frequency_textbox.Enabled = true;
                 DSP_start_button.Enabled = true;
+                request_stim_button.Enabled = true;
+                DSP_load_binary_button.Enabled = true;
             }
             else{
                 Console.WriteLine("Connection failed");
             }
         }
 
+
         private void DSP_load_binary_clicked(object sender, EventArgs e)
         {
-
+            dspInterface.uploadBinary();
         }
 
 
@@ -123,6 +128,13 @@ namespace MeaExampleNet{
         {
 
         }
+
+
+        private void request_stim_button_Click(object sender, EventArgs e)
+        {
+            dspInterface.triggerStimReg(100);
+        }
+
 
         private void Frequency_textbox_changed(object sender, EventArgs e)
         {
@@ -153,6 +165,16 @@ namespace MeaExampleNet{
 
         private void MeaForm_Load(object sender, EventArgs e)
         {
+        }
+
+        private void tbDeviceInfo_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
         }
 
     }

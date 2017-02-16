@@ -12,25 +12,18 @@ namespace MeaExampleNet{
 
     using Mcs.Usb;
 
-    public class DSPComms {
+    public partial class DSPComms {
 
         private CMcsUsbListNet usblist = new CMcsUsbListNet();
         private CMcsUsbListEntryNet dspPort;
         private CMcsUsbFactoryNet dspDevice;
         private uint requestID = 0;
         public bool connected = false;
+        public int a = 0;
 
-        static uint MAIL_BASE         =  0x1000;
-        static uint REQUEST_ID        =  MAIL_BASE;
-        static uint DAC_ID            =  MAIL_BASE + 0x8;
-        static uint ELECTRODES        =  MAIL_BASE + 0xc;
-        static uint ELECTRODES1       =  MAIL_BASE + 0xc;
-        static uint ELECTRODES2       =  MAIL_BASE + 0x10;
-        static uint PERIOD            =  MAIL_BASE + 0x14;
-        static uint SAMPLE            =  MAIL_BASE + 0x18;
-        static uint REQUEST_ACK       =  MAIL_BASE + 0x1c;
 
-        public DSPComms() {
+        public DSPComms()
+        {
             dspDevice = new CMcsUsbFactoryNet();
             usblist.Initialize(DeviceEnumNet.MCS_MEAUSB_DEVICE); // Get list of MEA devices connect by USB
 
@@ -56,35 +49,79 @@ namespace MeaExampleNet{
             }
         }
 
-        public void triggerStimReg(uint stimFreq){
 
-            dspDevice.WriteRegister(REQUEST_ID, requestID);
-            requestID++;
+        public void triggerStimReg(uint stimFreq)
+        {
 
-            dspDevice.WriteRegister(DAC_ID, (uint)0x0);
-            dspDevice.WriteRegister(ELECTRODES, (uint)0x200201);
-            dspDevice.WriteRegister(PERIOD, (uint)100000);
-            dspDevice.WriteRegister(SAMPLE, (uint)0x0);
+            this.a++;
+            dspDevice.WriteRegister(MAIL_BASE, (uint)a);
+            uint fuck = dspDevice.ReadRegister(0x1004);
+            uint fuck2 = dspDevice.ReadRegister(ELECTRODE_ENABLE);
 
-            uint response = dspDevice.ReadRegister(REQUEST_ACK);
-            while(response != requestID){
-                Console.WriteLine("Blocking on DSP transfer");
-                response = dspDevice.ReadRegister(REQUEST_ACK);
-            }
+            Console.WriteLine(a);
+            Console.WriteLine(fuck);
+            Console.WriteLine(fuck2);
+
         }
 
 
+        public void barfDebug()
+        {
+            String debug1 = Convert.ToString(dspDevice.ReadRegister(DEBUG1), 2);
+            String debug2 = Convert.ToString(dspDevice.ReadRegister(DEBUG2), 2);
+            String debug3 = Convert.ToString(dspDevice.ReadRegister(DEBUG3), 2);
 
-        public void uploadBinary(){
+            Console.WriteLine("DEBUG INFO");
+            Console.WriteLine(debug1);
+            Console.WriteLine(debug2);
+            Console.WriteLine(debug3);
+        }
+
+        public void barf(){
+            String mailbox     = Convert.ToString(dspDevice.ReadRegister(MAIL_BASE), 2);
+            String req_id      = Convert.ToString(dspDevice.ReadRegister(REQUEST_ID), 2);
+            String dac_id      = Convert.ToString(dspDevice.ReadRegister(DAC_ID), 2);
+            String electrodes1 = Convert.ToString(dspDevice.ReadRegister(ELECTRODES1), 2);
+            String electrodes2 = Convert.ToString(dspDevice.ReadRegister(ELECTRODES2), 2);
+            String period      = Convert.ToString(dspDevice.ReadRegister(PERIOD), 2);
+            String sample      = Convert.ToString(dspDevice.ReadRegister(SAMPLE), 2);
+            String req_ACK     = Convert.ToString(dspDevice.ReadRegister(REQUEST_ACK), 2);
+
+            String barfString = "Device send registers are: \n" +
+                $"mail base: ${mailbox} \n" +
+                $"req id: ${req_id} \n" +
+                $"dac_id: ${dac_id} \n" +
+                $"elec1: ${electrodes1} \n" +
+                $"elec2: ${electrodes2} \n" +
+                $"period: ${period} \n" +
+                $"sample: ${sample} \n" +
+                $"req_ACK: ${req_ACK} \n";
+
+            Console.WriteLine(barfString);
+        }
+
+
+        public void uploadBinary()
+        {
+
 
             string FirmwareFile;
             FirmwareFile = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             FirmwareFile += @"\..\..\..\FB_Example.bin";
 
+            if(!System.IO.File.Exists(FirmwareFile)){
+                throw new System.IO.FileNotFoundException("Binary file not found");
+            }
+            else {
+            }
+            cw("Disconnecting DSP");
+            dspDevice.Disconnect();
+            cw("Uploading new binary");
             dspDevice.LoadUserFirmware(FirmwareFile, dspPort);           // Code for uploading compiled binary
-            Console.WriteLine("New binary uploaded!");
-
+            uint lockMask = 64;
+            cw("Binary uploaded, reconnecting device");
+            dspDevice.Connect(dspPort, lockMask);
+            cw("Device reconnected. We are ready to go");
         }
     }
-
 }
