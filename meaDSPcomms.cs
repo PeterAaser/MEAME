@@ -62,6 +62,25 @@ namespace MeaExampleNet{
             Console.WriteLine(fuck);
             Console.WriteLine(fuck2);
 
+            barfDebug();
+        }
+
+
+        public String readDeviceBytes(uint start, uint nBytes)
+        {
+            List<byte> byteBuffer = new List<byte>();
+            uint bytesRead = 0;
+            while (bytesRead < nBytes)
+            {
+                uint meme = dspDevice.ReadRegister(start + bytesRead);
+                byteBuffer.AddRange(BitConverter.GetBytes(meme).ToList());
+                bytesRead += 4;
+            }
+            uint overshoot = (nBytes - bytesRead);
+            var trimmed = byteBuffer.Take((int)(nBytes - overshoot));
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            string hello  = encoding.GetString(trimmed.ToArray());
+            return hello;
         }
 
 
@@ -103,8 +122,6 @@ namespace MeaExampleNet{
 
         public void uploadBinary()
         {
-
-
             string FirmwareFile;
             FirmwareFile = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             FirmwareFile += @"\..\..\..\FB_Example.bin";
@@ -114,14 +131,49 @@ namespace MeaExampleNet{
             }
             else {
             }
-            cw("Disconnecting DSP");
+            pp.l("Disconnecting DSP...");
             dspDevice.Disconnect();
-            cw("Uploading new binary");
+            pp.l("Uploading new binary...");
             dspDevice.LoadUserFirmware(FirmwareFile, dspPort);           // Code for uploading compiled binary
             uint lockMask = 64;
-            cw("Binary uploaded, reconnecting device");
+            pp.l("Binary uploaded, reconnecting device...");
             dspDevice.Connect(dspPort, lockMask);
-            cw("Device reconnected. We are ready to go");
+            pp.l("Device reconnected. We are ready to go...");
+        }
+
+        public void readDevicePrint()
+        {
+
+            const uint segment_start = 0x110C;
+            const uint segment_end = 0x1FFC;
+            const uint segment_length = segment_end - segment_start;
+
+            pp.l("reading device log");
+
+            uint writeHead = dspDevice.ReadRegister(0x1100);
+            uint readHead = dspDevice.ReadRegister(0x1104);
+
+            Console.WriteLine(writeHead);
+            Console.WriteLine(readHead);
+
+            // check if we need to wrap
+            if (readHead > writeHead)
+            {
+                string first = readDeviceBytes(readHead, (segment_length - readHead));
+                string second = readDeviceBytes(segment_start, (writeHead - segment_start));
+
+                dspDevice.WriteRegister(0x1104, writeHead);
+
+                Console.Write(first);
+                Console.WriteLine(second);
+            }
+            else
+            {
+                string meme = readDeviceBytes(readHead, (writeHead - readHead));
+                Console.WriteLine(meme);
+
+                dspDevice.WriteRegister(0x1104, writeHead);
+            }
         }
     }
 }

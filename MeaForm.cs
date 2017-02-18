@@ -103,6 +103,7 @@ namespace MeaExampleNet{
                 Console.WriteLine("Connection successful");
                 Frequency_textbox.Enabled = true;
                 DSP_start_button.Enabled = true;
+                DSP_stop_button.Enabled = true;
                 request_stim_button.Enabled = true;
                 DSP_load_binary_button.Enabled = true;
             }
@@ -120,13 +121,13 @@ namespace MeaExampleNet{
 
         private void DSP_start_click(object sender, EventArgs e)
         {
-
+            dspInterface.readDevicePrint();
         }
 
 
         private void DSP_stop_click(object sender, EventArgs e)
         {
-
+            dspInterface.readDevicePrint();
         }
 
 
