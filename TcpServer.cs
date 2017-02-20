@@ -8,13 +8,12 @@ namespace MeaExampleNet{
     using System.Collections.Generic;
 
 
-    // hacked together based on some microsoft example.
-    public class TcpServer {
+    public class MeaTcpServer {
 
         public static List<Socket> listeners = new List<Socket>();
 
         // public static ManualResetEvent allDone = new ManualResetEvent(false);
-        public TcpServer()
+        public MeaTcpServer()
         {
             Thread serverThread = new Thread(listen);
             serverThread.Start();
@@ -22,6 +21,7 @@ namespace MeaExampleNet{
 
         public static void listen()
         {
+
             byte[] bytes = new Byte[1024];
             Socket listener = new Socket(AddressFamily.InterNetwork,
                                          SocketType.Stream,
@@ -32,21 +32,16 @@ namespace MeaExampleNet{
             IPAddress.TryParse(ep, out localip);
 
             listener.Bind(new IPEndPoint(localip, 8899));
+            listener.Listen(10);
 
             while(true)
             {
-                listener.BeginAccept(new AsyncCallback(acceptCallback),
-                                     listener);
+                Console.WriteLine("server is listening");
 
+                Socket connection = listener.Accept();
+                listeners.Add(connection);
+                Console.WriteLine("Connection accepted");
             }
-        }
-
-        public static void acceptCallback(IAsyncResult ar)
-        {
-            Socket listener = (Socket) ar.AsyncState;
-            Socket handler = listener.EndAccept(ar);
-
-            listeners.Add(handler);
         }
 
         public void sendData(Byte[] sweep)

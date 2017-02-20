@@ -74,6 +74,7 @@ namespace MeaExampleNet{
 
         private void MEA_start_click(object sender, EventArgs e)
         {
+            Console.WriteLine((uint)Devices_combobox.SelectedIndex);
             if(meaInterface
                .dataAcquisitionDevice
                .connectDataAcquisitionDevice((uint)Devices_combobox.SelectedIndex))
