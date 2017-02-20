@@ -117,6 +117,12 @@ namespace MeaExampleNet{
         private void DSP_load_binary_clicked(object sender, EventArgs e)
         {
             dspInterface.uploadBinary();
+            DSP_get_debug.Enabled = true;
+            sg3.Enabled = true;
+            sg2.Enabled = true;
+            sg1.Enabled = true;
+            sg_clear.Enabled = true;
+            Console.WriteLine("all debug buttons should be ready");
         }
 
 
@@ -128,7 +134,13 @@ namespace MeaExampleNet{
 
         private void DSP_stop_click(object sender, EventArgs e)
         {
-            dspInterface.readDevicePrint();
+            dspInterface.disconnect();
+        }
+
+
+        private void DSP_debug_clicked(object sender, EventArgs e)
+        {
+            dspInterface.barfDebug();
         }
 
 
@@ -179,5 +191,24 @@ namespace MeaExampleNet{
 
         }
 
+        private void sg3_Click(object sender, EventArgs e)
+        {
+            dspInterface.sg_debug(3);
+        }
+
+        private void sg2_Click(object sender, EventArgs e)
+        {
+            dspInterface.sg_debug(2);
+        }
+
+        private void sg1_Click(object sender, EventArgs e)
+        {
+            dspInterface.sg_debug(1);
+        }
+
+        private void sg_clear_Click(object sender, EventArgs e)
+        {
+            dspInterface.sg_clear();
+        }
     }
 }

@@ -73,6 +73,11 @@ namespace MeaExampleNet
             this.electrodes2_text = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.request_stim_button = new System.Windows.Forms.Button();
+            this.DSP_get_debug = new System.Windows.Forms.Button();
+            this.sg1 = new System.Windows.Forms.Button();
+            this.sg2 = new System.Windows.Forms.Button();
+            this.sg3 = new System.Windows.Forms.Button();
+            this.sg_clear = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // panel1
@@ -333,7 +338,7 @@ namespace MeaExampleNet
             // 
             // mail_text
             // 
-            this.mail_text.Location = new System.Drawing.Point(107, 307);
+            this.mail_text.Location = new System.Drawing.Point(420, 315);
             this.mail_text.Margin = new System.Windows.Forms.Padding(1);
             this.mail_text.Name = "mail_text";
             this.mail_text.Size = new System.Drawing.Size(95, 20);
@@ -343,7 +348,7 @@ namespace MeaExampleNet
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(33, 333);
+            this.label9.Location = new System.Drawing.Point(346, 341);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(33, 13);
             this.label9.TabIndex = 48;
@@ -351,7 +356,7 @@ namespace MeaExampleNet
             // 
             // req_id_text
             // 
-            this.req_id_text.Location = new System.Drawing.Point(107, 330);
+            this.req_id_text.Location = new System.Drawing.Point(420, 338);
             this.req_id_text.Margin = new System.Windows.Forms.Padding(1);
             this.req_id_text.Name = "req_id_text";
             this.req_id_text.Size = new System.Drawing.Size(95, 20);
@@ -361,7 +366,7 @@ namespace MeaExampleNet
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(33, 380);
+            this.label10.Location = new System.Drawing.Point(346, 388);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(65, 13);
             this.label10.TabIndex = 52;
@@ -369,7 +374,7 @@ namespace MeaExampleNet
             // 
             // electrodes1_text
             // 
-            this.electrodes1_text.Location = new System.Drawing.Point(107, 377);
+            this.electrodes1_text.Location = new System.Drawing.Point(420, 385);
             this.electrodes1_text.Margin = new System.Windows.Forms.Padding(1);
             this.electrodes1_text.Name = "electrodes1_text";
             this.electrodes1_text.Size = new System.Drawing.Size(95, 20);
@@ -379,7 +384,7 @@ namespace MeaExampleNet
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(33, 357);
+            this.label11.Location = new System.Drawing.Point(346, 365);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(36, 13);
             this.label11.TabIndex = 50;
@@ -387,7 +392,7 @@ namespace MeaExampleNet
             // 
             // dac_id_text
             // 
-            this.dac_id_text.Location = new System.Drawing.Point(107, 354);
+            this.dac_id_text.Location = new System.Drawing.Point(420, 362);
             this.dac_id_text.Margin = new System.Windows.Forms.Padding(1);
             this.dac_id_text.Name = "dac_id_text";
             this.dac_id_text.Size = new System.Drawing.Size(95, 20);
@@ -397,7 +402,7 @@ namespace MeaExampleNet
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(33, 474);
+            this.label12.Location = new System.Drawing.Point(346, 482);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(66, 13);
             this.label12.TabIndex = 60;
@@ -405,7 +410,7 @@ namespace MeaExampleNet
             // 
             // request_ACK_text
             // 
-            this.request_ACK_text.Location = new System.Drawing.Point(107, 471);
+            this.request_ACK_text.Location = new System.Drawing.Point(420, 479);
             this.request_ACK_text.Margin = new System.Windows.Forms.Padding(1);
             this.request_ACK_text.Name = "request_ACK_text";
             this.request_ACK_text.Size = new System.Drawing.Size(95, 20);
@@ -415,7 +420,7 @@ namespace MeaExampleNet
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(33, 451);
+            this.label13.Location = new System.Drawing.Point(346, 459);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(40, 13);
             this.label13.TabIndex = 58;
@@ -423,7 +428,7 @@ namespace MeaExampleNet
             // 
             // sample_text
             // 
-            this.sample_text.Location = new System.Drawing.Point(107, 448);
+            this.sample_text.Location = new System.Drawing.Point(420, 456);
             this.sample_text.Margin = new System.Windows.Forms.Padding(1);
             this.sample_text.Name = "sample_text";
             this.sample_text.Size = new System.Drawing.Size(95, 20);
@@ -433,7 +438,7 @@ namespace MeaExampleNet
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(33, 427);
+            this.label14.Location = new System.Drawing.Point(346, 435);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(36, 13);
             this.label14.TabIndex = 56;
@@ -441,7 +446,7 @@ namespace MeaExampleNet
             // 
             // period_text
             // 
-            this.period_text.Location = new System.Drawing.Point(107, 424);
+            this.period_text.Location = new System.Drawing.Point(420, 432);
             this.period_text.Margin = new System.Windows.Forms.Padding(1);
             this.period_text.Name = "period_text";
             this.period_text.Size = new System.Drawing.Size(95, 20);
@@ -451,7 +456,7 @@ namespace MeaExampleNet
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(33, 404);
+            this.label15.Location = new System.Drawing.Point(346, 412);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(65, 13);
             this.label15.TabIndex = 54;
@@ -459,7 +464,7 @@ namespace MeaExampleNet
             // 
             // electrodes2_text
             // 
-            this.electrodes2_text.Location = new System.Drawing.Point(107, 401);
+            this.electrodes2_text.Location = new System.Drawing.Point(420, 409);
             this.electrodes2_text.Margin = new System.Windows.Forms.Padding(1);
             this.electrodes2_text.Name = "electrodes2_text";
             this.electrodes2_text.Size = new System.Drawing.Size(95, 20);
@@ -469,7 +474,7 @@ namespace MeaExampleNet
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(33, 310);
+            this.label8.Location = new System.Drawing.Point(346, 318);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(51, 13);
             this.label8.TabIndex = 77;
@@ -486,11 +491,71 @@ namespace MeaExampleNet
             this.request_stim_button.UseVisualStyleBackColor = true;
             this.request_stim_button.Click += new System.EventHandler(this.request_stim_button_Click);
             // 
+            // DSP_get_debug
+            // 
+            this.DSP_get_debug.Enabled = false;
+            this.DSP_get_debug.Location = new System.Drawing.Point(349, 278);
+            this.DSP_get_debug.Name = "DSP_get_debug";
+            this.DSP_get_debug.Size = new System.Drawing.Size(95, 23);
+            this.DSP_get_debug.TabIndex = 79;
+            this.DSP_get_debug.Text = "Get debug data";
+            this.DSP_get_debug.UseVisualStyleBackColor = true;
+            this.DSP_get_debug.Click += new System.EventHandler(this.DSP_debug_clicked);
+            // 
+            // sg1
+            // 
+            this.sg1.Enabled = false;
+            this.sg1.Location = new System.Drawing.Point(12, 341);
+            this.sg1.Name = "sg1";
+            this.sg1.Size = new System.Drawing.Size(75, 23);
+            this.sg1.TabIndex = 80;
+            this.sg1.Text = "sg1 debug";
+            this.sg1.UseVisualStyleBackColor = true;
+            this.sg1.Click += new System.EventHandler(this.sg1_Click);
+            // 
+            // sg2
+            // 
+            this.sg2.Enabled = false;
+            this.sg2.Location = new System.Drawing.Point(13, 370);
+            this.sg2.Name = "sg2";
+            this.sg2.Size = new System.Drawing.Size(75, 23);
+            this.sg2.TabIndex = 81;
+            this.sg2.Text = "sg2 debug";
+            this.sg2.UseVisualStyleBackColor = true;
+            this.sg2.Click += new System.EventHandler(this.sg2_Click);
+            // 
+            // sg3
+            // 
+            this.sg3.Enabled = false;
+            this.sg3.Location = new System.Drawing.Point(13, 399);
+            this.sg3.Name = "sg3";
+            this.sg3.Size = new System.Drawing.Size(75, 23);
+            this.sg3.TabIndex = 82;
+            this.sg3.Text = "sg3 debug";
+            this.sg3.UseVisualStyleBackColor = true;
+            this.sg3.Click += new System.EventHandler(this.sg3_Click);
+            // 
+            // sg_clear
+            // 
+            this.sg_clear.Enabled = false;
+            this.sg_clear.Location = new System.Drawing.Point(13, 428);
+            this.sg_clear.Name = "sg_clear";
+            this.sg_clear.Size = new System.Drawing.Size(75, 23);
+            this.sg_clear.TabIndex = 83;
+            this.sg_clear.Text = "debug clear";
+            this.sg_clear.UseVisualStyleBackColor = true;
+            this.sg_clear.Click += new System.EventHandler(this.sg_clear_Click);
+            // 
             // MeaForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1078, 674);
+            this.Controls.Add(this.sg_clear);
+            this.Controls.Add(this.sg3);
+            this.Controls.Add(this.sg2);
+            this.Controls.Add(this.sg1);
+            this.Controls.Add(this.DSP_get_debug);
             this.Controls.Add(this.request_stim_button);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label12);
@@ -592,5 +657,10 @@ namespace MeaExampleNet
         private System.Windows.Forms.TextBox electrodes2_text;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button request_stim_button;
+        private System.Windows.Forms.Button DSP_get_debug;
+        private System.Windows.Forms.Button sg1;
+        private System.Windows.Forms.Button sg2;
+        private System.Windows.Forms.Button sg3;
+        private System.Windows.Forms.Button sg_clear;
     }
 }

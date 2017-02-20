@@ -19,12 +19,13 @@ namespace MeaExampleNet{
         private CMcsUsbFactoryNet dspDevice;
         private uint requestID = 0;
         public bool connected = false;
-        public int a = 0;
+        public uint a = 0;
 
 
         public DSPComms()
         {
             dspDevice = new CMcsUsbFactoryNet();
+            dspDevice.EnableExceptions(true);
             usblist.Initialize(DeviceEnumNet.MCS_MEAUSB_DEVICE); // Get list of MEA devices connect by USB
 
             bool dspPortFound = false;
@@ -49,20 +50,37 @@ namespace MeaExampleNet{
             }
         }
 
+        public void disconnect()
+        {
+            dspDevice.Disconnect();
+        }
 
         public void triggerStimReg(uint stimFreq)
         {
+            uint req_id = ++a;
+            uint dac_id = 0;
+            uint elec1 = 0x0103;
+            uint elec2 = 0x0;
+            uint period = 100;
+            uint sample = 0;
+            uint req_ack = a;
 
-            this.a++;
-            dspDevice.WriteRegister(MAIL_BASE, (uint)a);
-            uint fuck = dspDevice.ReadRegister(0x1004);
-            uint fuck2 = dspDevice.ReadRegister(ELECTRODE_ENABLE);
+            dspDevice.WriteRegister(DAC_ID, dac_id);
+            dspDevice.WriteRegister(ELECTRODES1, elec1);
+            dspDevice.WriteRegister(ELECTRODES2, elec2);
+            dspDevice.WriteRegister(PERIOD, period);
+            dspDevice.WriteRegister(SAMPLE, sample);
+            dspDevice.WriteRegister(REQUEST_ID, req_id);
 
-            Console.WriteLine(a);
-            Console.WriteLine(fuck);
-            Console.WriteLine(fuck2);
-
-            barfDebug();
+            for (int ii = 0; ii < 5; ii++)
+            {
+                if (req_ack == dspDevice.ReadRegister(REQUEST_ACK)){
+                    Console.WriteLine("Got em");
+                    break;
+                }
+                Console.WriteLine("That didn't go so well, trying again in 1 sec");
+                System.Threading.Thread.Sleep(1000);
+            }
         }
 
 
@@ -84,17 +102,6 @@ namespace MeaExampleNet{
         }
 
 
-        public void barfDebug()
-        {
-            String debug1 = Convert.ToString(dspDevice.ReadRegister(DEBUG1), 2);
-            String debug2 = Convert.ToString(dspDevice.ReadRegister(DEBUG2), 2);
-            String debug3 = Convert.ToString(dspDevice.ReadRegister(DEBUG3), 2);
-
-            Console.WriteLine("DEBUG INFO");
-            Console.WriteLine(debug1);
-            Console.WriteLine(debug2);
-            Console.WriteLine(debug3);
-        }
 
         public void barf(){
             String mailbox     = Convert.ToString(dspDevice.ReadRegister(MAIL_BASE), 2);
