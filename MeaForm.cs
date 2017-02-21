@@ -128,7 +128,7 @@ namespace MeaExampleNet{
 
         private void DSP_start_click(object sender, EventArgs e)
         {
-            dspInterface.readDevicePrint();
+            // dspInterface.readDevicePrint();
         }
 
 
@@ -146,7 +146,7 @@ namespace MeaExampleNet{
 
         private void request_stim_button_Click(object sender, EventArgs e)
         {
-            dspInterface.triggerStimReg(100);
+            dspInterface.triggerStimRegTest();
         }
 
 
@@ -194,21 +194,24 @@ namespace MeaExampleNet{
         private void sg3_Click(object sender, EventArgs e)
         {
             dspInterface.sg_debug(3);
+            dspInterface.barfSG();
         }
 
         private void sg2_Click(object sender, EventArgs e)
         {
             dspInterface.sg_debug(2);
+            dspInterface.barfSG();
         }
 
         private void sg1_Click(object sender, EventArgs e)
         {
             dspInterface.sg_debug(1);
+            dspInterface.barfSG();
         }
 
         private void sg_clear_Click(object sender, EventArgs e)
         {
-            dspInterface.sg_clear();
+            dspInterface.clearDebug();
         }
     }
 }
