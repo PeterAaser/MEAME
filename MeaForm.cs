@@ -140,7 +140,7 @@ namespace MeaExampleNet{
 
         private void DSP_debug_clicked(object sender, EventArgs e)
         {
-            dspInterface.barfDebug();
+            dspInterface.barfDAC();
         }
 
 

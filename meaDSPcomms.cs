@@ -84,9 +84,9 @@ namespace MeaExampleNet{
         {
 
 
-            triggerStimReg(0, 0x0103, 0x0, 100, 0);
-            triggerStimReg(1, 0xFF, 0x0, 200, 1);
-            triggerStimReg(2, 0x0, 0xFF, 300, 2);
+            triggerStimReg(0, 0xFFFF, 0x0, 100000, 0);
+            triggerStimReg(1, 0x0000, 0x0, 210000, 1);
+            triggerStimReg(2, 0x0000, 0x0, 330000, 2);
 
         }
 
