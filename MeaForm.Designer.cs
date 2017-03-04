@@ -52,7 +52,7 @@ namespace MeaExampleNet
             this.connect_DSP_button = new System.Windows.Forms.Button();
             this.Frequency_textbox = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
+            this.DSP_old_freq = new System.Windows.Forms.Button();
             this.DSP_start_button = new System.Windows.Forms.Button();
             this.DSP_load_binary_button = new System.Windows.Forms.Button();
             this.DSP_stop_button = new System.Windows.Forms.Button();
@@ -78,6 +78,8 @@ namespace MeaExampleNet
             this.sg2 = new System.Windows.Forms.Button();
             this.sg3 = new System.Windows.Forms.Button();
             this.sg_clear = new System.Windows.Forms.Button();
+            this.DSP_old_binary = new System.Windows.Forms.Button();
+            this.DSP_reset_button = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // panel1
@@ -293,20 +295,21 @@ namespace MeaExampleNet
             this.label7.TabIndex = 27;
             this.label7.Text = "Stimpack";
             // 
-            // button3
+            // DSP_old_freq
             // 
-            this.button3.Enabled = false;
-            this.button3.Location = new System.Drawing.Point(187, 205);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(95, 23);
-            this.button3.TabIndex = 28;
-            this.button3.Text = "Set frequency";
-            this.button3.UseVisualStyleBackColor = true;
+            this.DSP_old_freq.Enabled = false;
+            this.DSP_old_freq.Location = new System.Drawing.Point(187, 205);
+            this.DSP_old_freq.Name = "DSP_old_freq";
+            this.DSP_old_freq.Size = new System.Drawing.Size(95, 23);
+            this.DSP_old_freq.TabIndex = 28;
+            this.DSP_old_freq.Text = "old binary frequency change";
+            this.DSP_old_freq.UseVisualStyleBackColor = true;
+            this.DSP_old_freq.Click += new System.EventHandler(this.button3_Click);
             // 
             // DSP_start_button
             // 
             this.DSP_start_button.Enabled = false;
-            this.DSP_start_button.Location = new System.Drawing.Point(13, 233);
+            this.DSP_start_button.Location = new System.Drawing.Point(12, 261);
             this.DSP_start_button.Name = "DSP_start_button";
             this.DSP_start_button.Size = new System.Drawing.Size(75, 23);
             this.DSP_start_button.TabIndex = 30;
@@ -317,7 +320,7 @@ namespace MeaExampleNet
             // DSP_load_binary_button
             // 
             this.DSP_load_binary_button.Enabled = false;
-            this.DSP_load_binary_button.Location = new System.Drawing.Point(13, 205);
+            this.DSP_load_binary_button.Location = new System.Drawing.Point(12, 233);
             this.DSP_load_binary_button.Name = "DSP_load_binary_button";
             this.DSP_load_binary_button.Size = new System.Drawing.Size(155, 23);
             this.DSP_load_binary_button.TabIndex = 32;
@@ -328,7 +331,7 @@ namespace MeaExampleNet
             // DSP_stop_button
             // 
             this.DSP_stop_button.Enabled = false;
-            this.DSP_stop_button.Location = new System.Drawing.Point(94, 233);
+            this.DSP_stop_button.Location = new System.Drawing.Point(93, 261);
             this.DSP_stop_button.Name = "DSP_stop_button";
             this.DSP_stop_button.Size = new System.Drawing.Size(75, 23);
             this.DSP_stop_button.TabIndex = 31;
@@ -483,7 +486,7 @@ namespace MeaExampleNet
             // request_stim_button
             // 
             this.request_stim_button.Enabled = false;
-            this.request_stim_button.Location = new System.Drawing.Point(13, 262);
+            this.request_stim_button.Location = new System.Drawing.Point(12, 290);
             this.request_stim_button.Name = "request_stim_button";
             this.request_stim_button.Size = new System.Drawing.Size(156, 23);
             this.request_stim_button.TabIndex = 78;
@@ -546,11 +549,36 @@ namespace MeaExampleNet
             this.sg_clear.UseVisualStyleBackColor = true;
             this.sg_clear.Click += new System.EventHandler(this.sg_clear_Click);
             // 
+            // DSP_old_binary
+            // 
+            this.DSP_old_binary.Enabled = false;
+            this.DSP_old_binary.Location = new System.Drawing.Point(187, 175);
+            this.DSP_old_binary.Name = "DSP_old_binary";
+            this.DSP_old_binary.Size = new System.Drawing.Size(95, 23);
+            this.DSP_old_binary.TabIndex = 84;
+            this.DSP_old_binary.Text = "Load old binary";
+            this.DSP_old_binary.UseVisualStyleBackColor = true;
+            this.DSP_old_binary.Click += new System.EventHandler(this.DSP_old_binary_Click);
+            // 
+            // DSP_reset_button
+            // 
+            this.DSP_reset_button.Enabled = false;
+            this.DSP_reset_button.Location = new System.Drawing.Point(11, 204);
+            this.DSP_reset_button.Name = "DSP_reset_button";
+            this.DSP_reset_button.Size = new System.Drawing.Size(156, 23);
+            this.DSP_reset_button.TabIndex = 85;
+            this.DSP_reset_button.Text = "Reset DSP";
+            this.DSP_reset_button.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.DSP_reset_button.UseVisualStyleBackColor = true;
+            this.DSP_reset_button.Click += new System.EventHandler(this.DSP_reset_button_Click);
+            // 
             // MeaForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1078, 674);
+            this.Controls.Add(this.DSP_reset_button);
+            this.Controls.Add(this.DSP_old_binary);
             this.Controls.Add(this.sg_clear);
             this.Controls.Add(this.sg3);
             this.Controls.Add(this.sg2);
@@ -576,7 +604,7 @@ namespace MeaExampleNet
             this.Controls.Add(this.DSP_load_binary_button);
             this.Controls.Add(this.DSP_stop_button);
             this.Controls.Add(this.DSP_start_button);
-            this.Controls.Add(this.button3);
+            this.Controls.Add(this.DSP_old_freq);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.Frequency_textbox);
             this.Controls.Add(this.connect_DSP_button);
@@ -636,7 +664,7 @@ namespace MeaExampleNet
         private System.Windows.Forms.Button connect_DSP_button;
         private System.Windows.Forms.TextBox Frequency_textbox;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button DSP_old_freq;
         private System.Windows.Forms.Button DSP_start_button;
         private System.Windows.Forms.Button DSP_load_binary_button;
         private System.Windows.Forms.Button DSP_stop_button;
@@ -662,5 +690,7 @@ namespace MeaExampleNet
         private System.Windows.Forms.Button sg2;
         private System.Windows.Forms.Button sg3;
         private System.Windows.Forms.Button sg_clear;
+        private System.Windows.Forms.Button DSP_old_binary;
+        private System.Windows.Forms.Button DSP_reset_button;
     }
 }

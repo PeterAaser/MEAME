@@ -107,6 +107,9 @@ namespace MeaExampleNet{
                 DSP_stop_button.Enabled = true;
                 request_stim_button.Enabled = true;
                 DSP_load_binary_button.Enabled = true;
+                DSP_old_binary.Enabled = true;
+                DSP_reset_button.Enabled = true;
+                DSP_old_freq.Enabled = true;
             }
             else{
                 Console.WriteLine("Connection failed");
@@ -116,7 +119,7 @@ namespace MeaExampleNet{
 
         private void DSP_load_binary_clicked(object sender, EventArgs e)
         {
-            dspInterface.uploadBinary();
+            dspInterface.uploadMeameBinary();
             DSP_get_debug.Enabled = true;
             sg3.Enabled = true;
             sg2.Enabled = true;
@@ -140,7 +143,9 @@ namespace MeaExampleNet{
 
         private void DSP_debug_clicked(object sender, EventArgs e)
         {
-            dspInterface.barfDAC();
+            // dspInterface.barfMail();
+            // dspInterface.barfDAC();
+            dspInterface.barfDebug();
         }
 
 
@@ -212,6 +217,28 @@ namespace MeaExampleNet{
         private void sg_clear_Click(object sender, EventArgs e)
         {
             dspInterface.clearDebug();
+        }
+
+        private void DSP_old_binary_Click(object sender, EventArgs e)
+        {
+            dspInterface.uploadOldBinary();
+        }
+
+        private void DSP_reset_button_Click(object sender, EventArgs e)
+        {
+            dspInterface.resetDevices();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("Changing old stim freq");
+            dspInterface.triggerOldStimReq();
+        }
+
+        private void DSP_old_freq_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("Changing old stim freq");
+            dspInterface.triggerOldStimReq();
         }
     }
 }

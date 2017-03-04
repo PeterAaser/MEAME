@@ -15,8 +15,8 @@ namespace MeaExampleNet{
 
         public MeaInterface(){
             server = new MeaTcpServer();
-            dataAcquisitionDevice = new DAQ{samplerate = 1000,
-                                            channelBlockSize = 64,
+            dataAcquisitionDevice = new DAQ{samplerate = 40000,
+                                            channelBlockSize = 128,
                                             onChannelData = this.OnChannelData };
         }
 

@@ -70,8 +70,7 @@ namespace MeaExampleNet{
                 JsonTextReader memer = new JsonTextReader(memeReader);
                 JsonSerializer serializer = new JsonSerializer();
                 StimReq s = serializer.Deserialize<StimReq>(memer);
-                s.printMe();
-                Console.WriteLine("nice meme");
+                // s.printMe();
             }
         }
 
@@ -83,7 +82,7 @@ namespace MeaExampleNet{
         public void printMe() {
             Console.WriteLine("----");
             foreach (int el in electrodes) { Console.Write("[" + el + "]"); }
-            foreach (int sf in stimFreqs) { Console.Write("[" + sf + "]"); }
+            foreach (double sf in stimFreqs) { Console.Write("[" + sf + "]"); }
         }
     }
 
