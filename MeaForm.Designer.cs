@@ -80,6 +80,7 @@ namespace MeaExampleNet
             this.sg_clear = new System.Windows.Forms.Button();
             this.DSP_old_binary = new System.Windows.Forms.Button();
             this.DSP_reset_button = new System.Windows.Forms.Button();
+            this.DAC_textbox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // panel1
@@ -278,10 +279,10 @@ namespace MeaExampleNet
             // 
             // Frequency_textbox
             // 
-            this.Frequency_textbox.Location = new System.Drawing.Point(187, 236);
+            this.Frequency_textbox.Location = new System.Drawing.Point(190, 365);
             this.Frequency_textbox.Margin = new System.Windows.Forms.Padding(1);
             this.Frequency_textbox.Name = "Frequency_textbox";
-            this.Frequency_textbox.Size = new System.Drawing.Size(95, 20);
+            this.Frequency_textbox.Size = new System.Drawing.Size(81, 20);
             this.Frequency_textbox.TabIndex = 26;
             this.Frequency_textbox.Text = "Frequency";
             this.Frequency_textbox.TextChanged += new System.EventHandler(this.Frequency_textbox_changed);
@@ -486,7 +487,7 @@ namespace MeaExampleNet
             // request_stim_button
             // 
             this.request_stim_button.Enabled = false;
-            this.request_stim_button.Location = new System.Drawing.Point(12, 290);
+            this.request_stim_button.Location = new System.Drawing.Point(115, 341);
             this.request_stim_button.Name = "request_stim_button";
             this.request_stim_button.Size = new System.Drawing.Size(156, 23);
             this.request_stim_button.TabIndex = 78;
@@ -572,11 +573,21 @@ namespace MeaExampleNet
             this.DSP_reset_button.UseVisualStyleBackColor = true;
             this.DSP_reset_button.Click += new System.EventHandler(this.DSP_reset_button_Click);
             // 
+            // DAC_textbox
+            // 
+            this.DAC_textbox.Location = new System.Drawing.Point(115, 365);
+            this.DAC_textbox.Margin = new System.Windows.Forms.Padding(1);
+            this.DAC_textbox.Name = "DAC_textbox";
+            this.DAC_textbox.Size = new System.Drawing.Size(73, 20);
+            this.DAC_textbox.TabIndex = 86;
+            this.DAC_textbox.Text = "DAC";
+            // 
             // MeaForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1078, 674);
+            this.Controls.Add(this.DAC_textbox);
             this.Controls.Add(this.DSP_reset_button);
             this.Controls.Add(this.DSP_old_binary);
             this.Controls.Add(this.sg_clear);
@@ -692,5 +703,6 @@ namespace MeaExampleNet
         private System.Windows.Forms.Button sg_clear;
         private System.Windows.Forms.Button DSP_old_binary;
         private System.Windows.Forms.Button DSP_reset_button;
+        private System.Windows.Forms.TextBox DAC_textbox;
     }
 }

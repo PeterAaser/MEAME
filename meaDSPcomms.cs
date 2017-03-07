@@ -23,7 +23,6 @@ namespace MeaExampleNet{
         public uint b = 10000;
         private uint lockMask = 64;
 
-
         public DSPComms()
         {
             dspDevice = new CMcsUsbFactoryNet();
@@ -102,9 +101,9 @@ namespace MeaExampleNet{
 
             dspDevice.Disconnect();
         }
-        public void triggerStimRegTest()
+        public void triggerStimRegTest( uint group, uint period )
         {
-            triggerStimReg(0, 0xFFFF, 0x0, 100000, 0);
+            triggerStimReg( group, 0xFFFF, 0x0, period, 0 );
             // triggerStimReg(1, 0x0000, 0x0, 210000, 1);
             // triggerStimReg(2, 0x0000, 0x0, 330000, 2);
 

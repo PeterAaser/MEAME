@@ -143,15 +143,15 @@ namespace MeaExampleNet{
 
         private void DSP_debug_clicked(object sender, EventArgs e)
         {
-            // dspInterface.barfMail();
-            // dspInterface.barfDAC();
             dspInterface.barfDebug();
         }
 
 
         private void request_stim_button_Click(object sender, EventArgs e)
         {
-            dspInterface.triggerStimRegTest();
+            int period = Convert.ToInt32( Frequency_textbox.Text );
+            int group = Convert.ToInt32( DAC_textbox.Text );
+            dspInterface.triggerStimRegTest( (uint)group, (uint)period );
         }
 
 
