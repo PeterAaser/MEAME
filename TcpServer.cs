@@ -13,15 +13,16 @@ namespace MeaExampleNet{
 
         public static List<Socket> listeners = new List<Socket>();
         public static List<Double> stuff = new List<Double>();
+        public Action<StimReq> onTcpStimRequest { get; set; }
 
         // public static ManualResetEvent allDone = new ManualResetEvent(false);
         public MeaTcpServer()
         {
-            Thread serverThread = new Thread(listen);
+            Thread serverThread = new Thread( () => listen(this.onTcpStimRequest) );
             serverThread.Start();
         }
 
-        public static void listen()
+        public static void listen(Action<StimReq> onRequest)
         {
 
             byte[] bytes = new Byte[1024];
@@ -43,7 +44,7 @@ namespace MeaExampleNet{
                 Socket connection = listener.Accept();
                 listeners.Add(connection);
 
-                Thread stimThread = new Thread( () => attachReader(connection) );
+                Thread stimThread = new Thread( () => attachReader(connection, onRequest) );
                 stimThread.Start();
 
                 Console.WriteLine("Connection accepted");
@@ -58,19 +59,29 @@ namespace MeaExampleNet{
             }
         }
 
-        public static void attachReader(Socket socket)
+        public static void attachReader(Socket socket, Action<StimReq> onRequest)
         {
             NetworkStream ns = new NetworkStream(socket);
             StreamReader streamreader = new StreamReader(ns);
+            int throttle = 0;
 
             while (true)
             {
+                // Console.WriteLine("We have received data");
                 string memeString = streamreader.ReadLine();
                 StringReader memeReader = new StringReader(memeString);
                 JsonTextReader memer = new JsonTextReader(memeReader);
                 JsonSerializer serializer = new JsonSerializer();
                 StimReq s = serializer.Deserialize<StimReq>(memer);
-                // s.printMe();
+                if(throttle == 40)
+                {
+                    onRequest(s);
+                    throttle = 0;
+                }
+                else
+                {
+                    throttle++;
+                }
             }
         }
 
@@ -86,41 +97,4 @@ namespace MeaExampleNet{
         }
     }
 
-    public class Role{
-        public string Name { get; set; }
-    }
-
-
-    public class ebin {
-
-        static string json = @"{ 'name': 'Admin' }{ 'name': 'Publisher' }";
-
-        StringReader meme = new StringReader(json);
-        IList<Role> roles = new List<Role>();
-
-        public JsonTextReader reader = new JsonTextReader(new StringReader(json));
-
-        public ebin(){
-
-            this.reader.SupportMultipleContent = true;
-
-            while (true)
-            {
-                if (!reader.Read())
-                {
-                    break;
-                }
-
-                JsonSerializer serializer = new JsonSerializer();
-                Role role = serializer.Deserialize<Role>(reader);
-
-                roles.Add(role);
-            }
-
-            foreach (Role role in roles)
-            {
-                Console.WriteLine(role.Name);
-            }
-        }
-    }
 }

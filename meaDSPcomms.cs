@@ -87,14 +87,13 @@ namespace MeaExampleNet{
                 dspDevice.WriteRegister(SAMPLE, sample);
                 dspDevice.WriteRegister(REQUEST_ID, req_id);
 
-                for (int ii = 0; ii < 5; ii++)
+                for (int ii = 0; ii < 1; ii++)
                 {
                     if (req_ack == dspDevice.ReadRegister(REQUEST_ACK)){
                         Console.WriteLine("Got em");
                         break;
                     }
-                    Console.WriteLine("That didn't go so well, trying again in 1 sec");
-                    System.Threading.Thread.Sleep(1000);
+                    Console.WriteLine("Request failure");
                 }
             }
             else{ Console.WriteLine("Connection Error"); return; }
@@ -103,7 +102,7 @@ namespace MeaExampleNet{
         }
         public void triggerStimRegTest( uint group, uint period )
         {
-            triggerStimReg( group, 0xFFFF, 0x0, period, 0 );
+            triggerStimReg( group, 0x0303, 0x0, period, 0 );
             // triggerStimReg(1, 0x0000, 0x0, 210000, 1);
             // triggerStimReg(2, 0x0000, 0x0, 330000, 2);
 

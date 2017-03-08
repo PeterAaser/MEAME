@@ -11,10 +11,12 @@ namespace MeaExampleNet{
 
         private readonly CMcsUsbListNet usblist = new CMcsUsbListNet();
         public DAQ dataAcquisitionDevice;
+        public DSPComms dspInterface;
         public MeaTcpServer server;
 
         public MeaInterface(){
-            server = new MeaTcpServer();
+            server = new MeaTcpServer(){ onTcpStimRequest = this.onStimRequest };
+            dspInterface = new DSPComms();
             dataAcquisitionDevice = new DAQ{samplerate = 40000,
                                             channelBlockSize = 128,
                                             onChannelData = this.OnChannelData };
@@ -22,8 +24,6 @@ namespace MeaExampleNet{
 
         public void OnChannelData(int mChannelHandles, int[] data, int totalChannels, int returnedFrames)
         {
-            // Console.WriteLine("Pretendin we sendin'");
-
             byte[] sendBuffer = new byte[returnedFrames * 4 * 4];
 
             for (int ii = 0; ii < totalChannels; ii++){
@@ -40,6 +40,13 @@ namespace MeaExampleNet{
                 }
             }
             server.sendData(sendBuffer);
+        }
+
+        public void onStimRequest(StimReq s)
+        {
+            uint period = (uint)s.stimFreqs[0];
+            dspInterface.triggerStimRegTest(0, period);
+            Console.WriteLine($"triggering stim request with {period}");
         }
 
         public String[] getDeviceListDescriptors(){

@@ -15,7 +15,6 @@ namespace MeaExampleNet{
     public partial class MeaForm : Form{
 
         public MeaInterface meaInterface;
-        public DSPComms dspInterface;
         private bool running = false;
 
         public MeaForm(){
@@ -99,8 +98,7 @@ namespace MeaExampleNet{
         private void connect_DSP_click(object sender, EventArgs e)
         {
             Console.WriteLine("Attempting to connect to DSP");
-            dspInterface = new DSPComms();
-            if(dspInterface.connected){
+            if(meaInterface.dspInterface.connected){
                 Console.WriteLine("Connection successful");
                 Frequency_textbox.Enabled = true;
                 DSP_start_button.Enabled = true;
@@ -119,7 +117,7 @@ namespace MeaExampleNet{
 
         private void DSP_load_binary_clicked(object sender, EventArgs e)
         {
-            dspInterface.uploadMeameBinary();
+            meaInterface.dspInterface.uploadMeameBinary();
             DSP_get_debug.Enabled = true;
             sg3.Enabled = true;
             sg2.Enabled = true;
@@ -131,19 +129,19 @@ namespace MeaExampleNet{
 
         private void DSP_start_click(object sender, EventArgs e)
         {
-            // dspInterface.readDevicePrint();
+            // meaInterface.dspInterface.readDevicePrint();
         }
 
 
         private void DSP_stop_click(object sender, EventArgs e)
         {
-            dspInterface.disconnect();
+            meaInterface.dspInterface.disconnect();
         }
 
 
         private void DSP_debug_clicked(object sender, EventArgs e)
         {
-            dspInterface.barfDebug();
+            meaInterface.dspInterface.barfDebug();
         }
 
 
@@ -151,7 +149,7 @@ namespace MeaExampleNet{
         {
             int period = Convert.ToInt32( Frequency_textbox.Text );
             int group = Convert.ToInt32( DAC_textbox.Text );
-            dspInterface.triggerStimRegTest( (uint)group, (uint)period );
+            meaInterface.dspInterface.triggerStimRegTest( (uint)group, (uint)period );
         }
 
 
@@ -198,47 +196,47 @@ namespace MeaExampleNet{
 
         private void sg3_Click(object sender, EventArgs e)
         {
-            dspInterface.sg_debug(3);
-            dspInterface.barfSG();
+            meaInterface.dspInterface.sg_debug(3);
+            meaInterface.dspInterface.barfSG();
         }
 
         private void sg2_Click(object sender, EventArgs e)
         {
-            dspInterface.sg_debug(2);
-            dspInterface.barfSG();
+            meaInterface.dspInterface.sg_debug(2);
+            meaInterface.dspInterface.barfSG();
         }
 
         private void sg1_Click(object sender, EventArgs e)
         {
-            dspInterface.sg_debug(1);
-            dspInterface.barfSG();
+            meaInterface.dspInterface.sg_debug(1);
+            meaInterface.dspInterface.barfSG();
         }
 
         private void sg_clear_Click(object sender, EventArgs e)
         {
-            dspInterface.clearDebug();
+            meaInterface.dspInterface.clearDebug();
         }
 
         private void DSP_old_binary_Click(object sender, EventArgs e)
         {
-            dspInterface.uploadOldBinary();
+            meaInterface.dspInterface.uploadOldBinary();
         }
 
         private void DSP_reset_button_Click(object sender, EventArgs e)
         {
-            dspInterface.resetDevices();
+            meaInterface.dspInterface.resetDevices();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             Console.WriteLine("Changing old stim freq");
-            dspInterface.triggerOldStimReq();
+            meaInterface.dspInterface.triggerOldStimReq();
         }
 
         private void DSP_old_freq_Click(object sender, EventArgs e)
         {
             Console.WriteLine("Changing old stim freq");
-            dspInterface.triggerOldStimReq();
+            meaInterface.dspInterface.triggerOldStimReq();
         }
     }
 }
