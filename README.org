@@ -1,4 +1,50 @@
 * MEAME
+  Nice meme.
 
-  Currently not in a functional state, but should offer some insight into developing software
-  for close to real time closed loop systems using the MEA2100 system
+* Contents
+** MeaForm.cs
+   Simple windows frontend, regrettably also serves as the entrypoint for the application, hopefully
+   something that will be amended in the future. Yeah right...
+
+** MeaInterfaces.cs
+   This class contains objects for interfacing with the MEA2100 system, and also 
+   the TCP server.
+   Currently also contains some of the methods that the DSP and DataAcquisition (DACQ)
+   interface objects are constructed with.
+
+** DAQconfig.cs
+   This class configures the data acquisition device and attaches a method to the onData
+   event. This onData method is passed as a constructor argument
+
+** TcpServer.cs
+   You're better off seeing for yourself. It's fucking ugly, I can tell you that much.
+   Basically, on incoming connection the socket is put in a list of listeners and every time there
+   is new data this data is sent in raw form over TCP. If multiple channels are listened to
+   it is the responsibility of the listener to demux the stream into its constituent channel streams.
+
+   Each socket also gets its own thread so that whenever they send a stim request the stim request
+   will be sent to the DSP. YOLO :--DDD
+
+** meaDSPComms.cs
+   Responsible for sending stimulus requests to the DSP. The class is split, so some of the
+   debug methods are located in the dspRegisters.cs file. (Very consistant naming scheme! dsp, DSP,
+   mea, looks the same to me.
+
+* Stimulation
+  As described in previous section, stimulation is performed via stimulus requests from meaDSPComms to 
+  the DSP. a stimulus request will typically denote a set of target electrodes and corresponding period 
+  given in "sweep ticks". 
+  This means, like a typical console game, logic is tied to framerate (or sample rate in this case).
+  However simply using a timer is easy, so for now you can assume that it will always be going at 
+  40kHz, thus by specifying 20000 ticks you will stimulate at 2Hz while 40000 ticks will results
+
+  A sample request will look something like:
+#+BEGIN_SRC js
+  { 
+    "electrodes" : [3, 4, 5, 6], 
+    "stimFreqs" : [10118, 5204, 4203, 1795] 
+  }
+#+END_SRC
+  Indicating that electrode sites 3, 4, 5 and 6 should wait 10k, 5k, 4, and ~2k ticks between each stim
+  This API might be changed into a target Hz, and possibly even to a simple float in range 0 - 1 so
+  that you will not have to consider what frequencies neurons respond best to. Open to pull requests!
